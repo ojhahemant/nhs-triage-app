@@ -487,19 +487,21 @@ small {
   align-items: center;
 }
 
-/* Clinical case categorization styles */
+/* Clinical case categorization styles - NHS Expert Guidelines */
 .result-value.category-urgent {
   color: #d5281b; /* NHS Red */
   font-weight: 600;
   display: flex;
   align-items: center;
+  font-size: 1.1em;
 }
 
 .result-value.category-routine {
-  color: #ffb81c; /* NHS Yellow */
+  color: #ffb81c; /* NHS Yellow/Amber */
   font-weight: 600;
   display: flex;
   align-items: center;
+  font-size: 1.1em;
 }
 
 .result-value.category-non-priority {
@@ -507,13 +509,7 @@ small {
   font-weight: 600;
   display: flex;
   align-items: center;
-}
-
-.result-value.category-multi-disciplinary-review {
-  color: #330072; /* NHS Purple */
-  font-weight: 600;
-  display: flex;
-  align-items: center;
+  font-size: 1.1em;
 }
 
 .confidence-indicator {

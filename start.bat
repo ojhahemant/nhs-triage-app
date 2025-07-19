@@ -1,5 +1,5 @@
 @echo off
-echo NHS Plastic Surgery Triage System Launcher
+echo Plastic Surgery Triage System Launcher
 echo =====================================
 echo.
 
@@ -24,7 +24,7 @@ if %ERRORLEVEL% NEQ 0 (
     echo.
 )
 
-echo Starting the NHS Plastic Surgery Triage System...
+echo Starting the Plastic Surgery Triage System...
 echo The application will open in your default browser.
 echo.
 echo Press Ctrl+C to stop the application.

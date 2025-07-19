@@ -36,12 +36,11 @@ interface TriageDataType {
   };
 }
 
-// Available clinical case categories
+// Available clinical case categories based on Plastic Surgery expert guidelines
 export enum ClinicalCaseCategory {
-  URGENT = "Urgent",
-  ROUTINE = "Routine",
-  NON_PRIORITY = "Non-Priority",
-  MDT_REVIEW = "Multi-Disciplinary Review"
+  URGENT = "URGENT",
+  ROUTINE = "ROUTINE", 
+  NON_PRIORITY = "NON_PRIORITY"
 }
 
 // Interface for categorization result
@@ -130,7 +129,7 @@ export const fetchOpenAICompletion = async (
     }
 
     // Create a system prompt with NHS context and triage data
-    const systemPrompt = `You are an AI assistant for the NHS Plastic Surgery Triage System. 
+    const systemPrompt = `You are an AI assistant for the Plastic Surgery Triage System. 
 You help healthcare professionals understand triage results and provide additional information about plastic surgery cases.
 
 You have access to the following triage data:
@@ -213,42 +212,193 @@ export const categorizeClinicalCase = async (
       };
     }
 
-    // Build context string
+    // Build context string with enhanced parsing for NHS referral patterns
     let contextString = '';
+    let urgencyIndicators: string[] = [];
+    let routineIndicators: string[] = [];
+    let nonPriorityIndicators: string[] = [];
+    
     if (additionalContext.patientAge) {
       contextString += `Patient Age: ${additionalContext.patientAge}\n`;
+      // Elderly patients may need higher priority
+      const age = parseInt(additionalContext.patientAge);
+      if (age >= 70) {
+        urgencyIndicators.push('elderly patient (age ≥70)');
+      }
     }
+    
     if (additionalContext.symptoms && additionalContext.symptoms.length > 0) {
       contextString += `Symptoms: ${additionalContext.symptoms.join(', ')}\n`;
     }
+    
     if (additionalContext.otherNotes) {
       contextString += `Additional Notes: ${additionalContext.otherNotes}\n`;
     }
+    
     if (additionalContext.extractedDocumentText) {
-      contextString += `Document Content: ${additionalContext.extractedDocumentText.substring(0, 500)}...\n`;
+      const docText = additionalContext.extractedDocumentText.toLowerCase();
+      contextString += `Document Content: ${additionalContext.extractedDocumentText.substring(0, 1000)}...\n`;
+      
+      // Parse document for specific NHS referral urgency indicators
+      const urgentKeywords = [
+        'malignancy', 'malignant', 'cancer', 'carcinoma', 'melanoma',
+        'bleeding', 'ulcerat', 'rapid', 'growing', 'chang', 'enlarg',
+        'urgent', '2 week', 'two week', 'immediately', 'asap',
+        'suspicious', 'irregular', 'asymmetr', 'variegated',
+        'fixed', 'attach', 'lymph', 'node', 'swelling',
+        'immunocompromised', 'transplant', 'immunosuppress',
+        'head', 'face', 'functional', 'vision', 'breathing',
+        'speech', 'hearing', 'eating', 'activities of daily living', 'adl'
+      ];
+      
+      const routineKeywords = [
+        'routine', 'soon', '4-6 week', '6 week', 'expedite',
+        'cyst', 'lipoma', 'seborrheic', 'actinic', 'keratosis',
+        'scar', 'keloid', 'cosmetic', 'appearance'
+      ];
+      
+      const nonPriorityKeywords = [
+        'cosmetic only', 'appearance only', 'when convenient',
+        'no urgency', 'stable', 'long-standing', 'no change'
+      ];
+      
+      // Check for urgent indicators
+      urgentKeywords.forEach(keyword => {
+        if (docText.includes(keyword)) {
+          urgencyIndicators.push(`document mentions "${keyword}"`);
+        }
+      });
+      
+      // Check for routine indicators
+      routineKeywords.forEach(keyword => {
+        if (docText.includes(keyword)) {
+          routineIndicators.push(`document mentions "${keyword}"`);
+        }
+      });
+      
+      // Check for non-priority indicators
+      nonPriorityKeywords.forEach(keyword => {
+        if (docText.includes(keyword)) {
+          nonPriorityIndicators.push(`document mentions "${keyword}"`);
+        }
+      });
     }
+    
     if (additionalContext.imageDescription) {
+      const imgDesc = additionalContext.imageDescription.toLowerCase();
       contextString += `Image Description: ${additionalContext.imageDescription}\n`;
+      
+      // Parse image description for visual indicators
+      const visualUrgentKeywords = [
+        'irregular', 'asymmetric', 'bleeding', 'ulcerated', 'black', 'dark',
+        'variegated', 'multiple colors', 'raised', 'nodular', 'large'
+      ];
+      
+      visualUrgentKeywords.forEach(keyword => {
+        if (imgDesc.includes(keyword)) {
+          urgencyIndicators.push(`image shows "${keyword}" features`);
+        }
+      });
+    }
+    
+    // Add parsed indicators to context
+    if (urgencyIndicators.length > 0) {
+      contextString += `\nURGENT INDICATORS DETECTED: ${urgencyIndicators.join(', ')}\n`;
+    }
+    if (routineIndicators.length > 0) {
+      contextString += `\nROUTINE INDICATORS DETECTED: ${routineIndicators.join(', ')}\n`;
+    }
+    if (nonPriorityIndicators.length > 0) {
+      contextString += `\nNON-PRIORITY INDICATORS DETECTED: ${nonPriorityIndicators.join(', ')}\n`;
     }
 
-    const systemPrompt = `You are a clinical triage assistant for NHS Plastic Surgery services. 
-Your task is to categorize clinical cases into one of four categories:
+    const systemPrompt = `You are a clinical triage assistant for Plastic Surgery services following expert-defined clinical guidelines. 
+Your task is to categorize clinical cases into one of three categories based on Plastic Surgery Urgency Categorization Rules:
 
-1. URGENT - Cases requiring immediate attention (within 2 weeks)
-2. ROUTINE - Standard cases that can wait (2-18 weeks)  
-3. NON-PRIORITY - Cases with low clinical priority (18+ weeks)
-4. MDT_REVIEW - Complex cases requiring multi-disciplinary team review
+## 🔴 URGENT (Urgency Score 8-10, Within 2 weeks):
+- Suspected malignancy
+- Large lesion
+- Rapidly enlarging or changing lesion
+- Bleeding or ulcerated lesion
+- Non-healing lesions or ulcers
+- Lesions fixed to underlying structures
+- Pigmented lesions with irregular features (>6mm, asymmetry, variegated color)
+- Nodular lesion with telangiectasia
+- History of skin cancer (BCC, SCC, Melanoma)
+- Elderly or immunocompromised patients (e.g. transplant patients)
+- Lesions on head/face with above high-risk features
+- History of excessive sun exposure / tanning bed usage
+- Lymphadenopathy (neck, axilla, groin swelling)
+- Functional compromise (vision, breathing, speech, hearing, smell, eating)
+- Untreated cancer
+- Pre-treatment planning for cancer reconstruction
+- Hand issues seriously affecting ADL (Activities of Daily Living)
+- GP explicitly concerned about malignancy or requesting urgent referral
+
+## 🟡 ROUTINE (Urgency Score 5-7, Within 6 weeks):
+- Slowly growing lesions
+- Long-standing lesions with minimal change
+- Cystic lesions
+- Lipomas
+- Actinic (solar) keratosis
+- Large seborrheic keratosis
+- Cosmetic or appearance concerns
+- Planning reconstruction post-cancer treatment
+- Hand cases NOT compromising ADL
+- Scars, abnormal scars, and keloids
+- GP requesting "soon" or "within 4-6 weeks"
+
+## 🟢 NON_PRIORITY (Urgency Score 2-4, Routine scheduling):
+- Cosmetic or appearance concerns only
+- Stable lesions with no recent changes
+- Abnormal scars or keloids (stable)
+- Seborrheic keratosis (large but stable)
+- Actinic keratosis (stable)
+- Lipomas (stable)
+- Cystic lesions (stable)
+- GP marking as "routine" with no urgency indicators
+
+## CONFIDENCE SCORING GUIDELINES:
+- High Confidence (≥80%): Clear indicators present, strong clinical evidence
+- Medium Confidence (50-79%): Some indicators present, clinical review recommended
+- Low Confidence (<50%): Weak indicators, manual review required
 
 Analyze the clinical information provided and respond with a JSON object containing:
-- category: One of the four categories above
+- category: One of "URGENT", "ROUTINE", or "NON_PRIORITY"
 - confidence: A number between 0 and 1 indicating your confidence in the categorization
-- rationale: A brief explanation of your reasoning
+- rationale: A brief explanation referencing specific clinical indicators from the guidelines
 
-Base your categorization on clinical urgency, complexity, and potential impact on patient outcomes.`;
+Base your categorization strictly on the clinical indicators listed above, patient age, functional impact, and GP assessment language.`;
 
     const prompt = `Clinical Description: ${clinicalDescription}
 
 ${contextString}
+
+SPECIAL ATTENTION TO GP ASSESSMENT LANGUAGE:
+- Look for phrases like "GP concerned about malignancy", "urgent", "within 2 weeks" → URGENT
+- Look for phrases like "soon", "within 4-6 weeks", "expedite" → ROUTINE  
+- Look for phrases like "routine", "when convenient", "no urgency" → NON_PRIORITY
+
+SCORING FACTORS TO CONSIDER:
+1. Clinical Description Features:
+   - Mention of bleeding, ulceration, rapid growth → URGENT
+   - Large size (>6mm for pigmented lesions) → Higher urgency
+   - Irregular features, asymmetry, color variation → URGENT
+   - Fixed to underlying structures → URGENT
+   
+2. Patient Demographics:
+   - Elderly patients with suspicious lesions → Higher urgency
+   - Immunocompromised status → Higher urgency
+   - History of skin cancer → Higher urgency
+   
+3. Functional Impact:
+   - Affecting vision, breathing, speech, hearing, eating → URGENT
+   - Hand issues affecting daily activities → URGENT
+   - Cosmetic concerns only → NON_PRIORITY
+
+4. Location and Risk Factors:
+   - Head/face lesions with high-risk features → Higher urgency
+   - History of sun exposure/tanning with suspicious features → Higher urgency
 
 Please categorize this clinical case and provide your response in JSON format.`;
 
@@ -316,10 +466,8 @@ const mapToCategory = (categoryString: string): ClinicalCaseCategory => {
     return ClinicalCaseCategory.ROUTINE;
   } else if (normalized.includes('NONPRIORITY') || normalized.includes('NON_PRIORITY')) {
     return ClinicalCaseCategory.NON_PRIORITY;
-  } else if (normalized.includes('MDT') || normalized.includes('REVIEW')) {
-    return ClinicalCaseCategory.MDT_REVIEW;
   } else {
-    // Default fallback
+    // Default fallback - most cases should be routine if unclear
     return ClinicalCaseCategory.ROUTINE;
   }
 };
@@ -337,10 +485,13 @@ const extractCategoryFromText = (text: string): CategorizationResult => {
   
   if (upperText.includes('URGENT')) {
     category = ClinicalCaseCategory.URGENT;
+    confidence = 0.8;
   } else if (upperText.includes('NON-PRIORITY') || upperText.includes('NON_PRIORITY')) {
     category = ClinicalCaseCategory.NON_PRIORITY;
-  } else if (upperText.includes('MDT') || upperText.includes('REVIEW')) {
-    category = ClinicalCaseCategory.MDT_REVIEW;
+    confidence = 0.8;
+  } else if (upperText.includes('ROUTINE')) {
+    category = ClinicalCaseCategory.ROUTINE;
+    confidence = 0.8;
   }
   
   // Try to extract confidence if mentioned
@@ -380,7 +531,7 @@ export const analyzeImage = async (
     // Ensure we're using a vision-capable model
     const visionModel = model.includes('gpt-4o') ? model : 'gpt-4o';
 
-    const systemPrompt = `You are a medical AI assistant specialized in analyzing clinical images for NHS Plastic Surgery services. 
+    const systemPrompt = `You are a medical AI assistant specialized in analyzing clinical images for Plastic Surgery services. 
 Provide detailed, objective observations about what you see in the image. Focus on:
 - Visual characteristics relevant to plastic surgery
 - Any visible abnormalities or conditions

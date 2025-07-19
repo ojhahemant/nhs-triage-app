@@ -1,4 +1,4 @@
-# NHS Plastic Surgery Triage System with OpenAI Integration
+# Plastic Surgery Triage System with OpenAI Integration
 
 ## Setup and Running Instructions
 

@@ -35,22 +35,29 @@ export const generateSuggestedQuestions = (triageData: TriageDataType): string[]
     ];
   }
   
-  // Add category-specific questions
+  // Add category-specific questions based on NHS expert guidelines
   switch (categorization.category) {
     case ClinicalCaseCategory.URGENT:
       questions.push(
         "Why is this case considered urgent?",
         "What's the recommended timeframe for this referral?",
-        "What symptoms indicate potential malignancy?",
-        "What specialist should see this patient?"
+        "What are the key malignancy indicators I should look for?",
+        "How should I communicate urgency to the patient?",
+        "What immediate precautions should the patient take?",
+        "Which specialist should see this patient first?",
+        "What red flag symptoms indicate worsening condition?",
+        "How can I fast-track this referral?"
       );
       break;
     case ClinicalCaseCategory.ROUTINE:
       questions.push(
         "What makes this a routine case rather than urgent?",
-        "What monitoring is recommended for this patient?",
-        "What changes would elevate this to urgent?",
-        "How long should this patient wait for a specialist?"
+        "What's the expected waiting time for routine referrals?",
+        "What should I tell the patient about timing?",
+        "Are there any warning signs to watch for?",
+        "What interim management can I provide?",
+        "How should I monitor the patient while waiting?",
+        "What would escalate this to urgent priority?"
       );
       break;
     case ClinicalCaseCategory.NON_PRIORITY:
@@ -58,15 +65,11 @@ export const generateSuggestedQuestions = (triageData: TriageDataType): string[]
         "What self-care advice can I give this patient?",
         "What symptoms should the patient watch for?",
         "When should the patient seek further assessment?",
-        "Are there any treatments to recommend in the meantime?"
-      );
-      break;
-    case ClinicalCaseCategory.MDT_REVIEW:
-      questions.push(
-        "Why does this case need multidisciplinary review?",
-        "Which specialties should be involved?",
-        "What's the process for MDT referral?",
-        "How urgent is the MDT review needed?"
+        "Are there any treatments to recommend in the meantime?",
+        "How should I communicate the timeline to the patient?",
+        "What follow-up arrangements are needed?",
+        "Could this become more urgent over time?",
+        "What lifestyle advice might help?"
       );
       break;
   }
