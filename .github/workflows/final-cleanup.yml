@@ -1,0 +1,29 @@
+name: Final Nginx Cleanup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove Specific Old Nginx Config
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "--- Removing /etc/nginx/sites-available/medinnovations ---"
+            sudo rm -f /etc/nginx/sites-available/medinnovations
+
+            echo "--- Removing symlink from /etc/nginx/sites-enabled/medinnovations (if it exists) ---"
+            sudo rm -f /etc/nginx/sites-enabled/medinnovations
+
+            echo "--- Testing Nginx Configuration ---"
+            sudo nginx -t
+
+            echo "--- Restarting Nginx Service ---"
+            sudo systemctl restart nginx
+
+            echo "--- Final Cleanup Attempt Complete ---"

@@ -1,0 +1,529 @@
+/* =======================================
+   NHS SMART TRIAGE - RESPONSIVE DESIGN
+   ======================================= */
+
+/* ===========================
+   BREAKPOINT SYSTEM
+   =========================== */
+
+:root {
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+}
+
+/* ===========================
+   MOBILE FIRST BASE STYLES
+   =========================== */
+
+/* Base styles apply to all devices (320px and up) */
+.container {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===========================
+   SMALL DEVICES (PHONES)
+   576px and up
+   =========================== */
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+  
+  /* Grid System */
+  .sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  
+  /* Display */
+  .sm\:block { display: block; }
+  .sm\:inline-block { display: inline-block; }
+  .sm\:inline { display: inline; }
+  .sm\:flex { display: flex; }
+  .sm\:grid { display: grid; }
+  .sm\:hidden { display: none; }
+  
+  /* Text Alignment */
+  .sm\:text-left { text-align: left; }
+  .sm\:text-center { text-align: center; }
+  .sm\:text-right { text-align: right; }
+  
+  /* Typography */
+  .sm\:text-xs { font-size: var(--font-size-xs); }
+  .sm\:text-sm { font-size: var(--font-size-sm); }
+  .sm\:text-base { font-size: var(--font-size-base); }
+  .sm\:text-lg { font-size: var(--font-size-lg); }
+  
+  /* Spacing */
+  .sm\:p-2 { padding: var(--spacing-sm); }
+  .sm\:p-3 { padding: var(--spacing-md); }
+  .sm\:p-4 { padding: var(--spacing-lg); }
+  .sm\:px-2 { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+  .sm\:px-3 { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+  .sm\:px-4 { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+  .sm\:py-2 { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+  .sm\:py-3 { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+  .sm\:py-4 { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+  
+  .sm\:m-2 { margin: var(--spacing-sm); }
+  .sm\:m-3 { margin: var(--spacing-md); }
+  .sm\:m-4 { margin: var(--spacing-lg); }
+  .sm\:mx-auto { margin-left: auto; margin-right: auto; }
+  .sm\:my-2 { margin-top: var(--spacing-sm); margin-bottom: var(--spacing-sm); }
+  .sm\:my-3 { margin-top: var(--spacing-md); margin-bottom: var(--spacing-md); }
+  .sm\:my-4 { margin-top: var(--spacing-lg); margin-bottom: var(--spacing-lg); }
+  
+  /* Sidebar adjustments for small screens */
+  .sidebar {
+    width: var(--sidebar-width-collapsed);
+  }
+  
+  .sidebar .nav-label {
+    display: none;
+  }
+  
+  .main-content {
+    margin-left: var(--sidebar-width-collapsed);
+  }
+}
+
+/* ===========================
+   MEDIUM DEVICES (TABLETS)
+   768px and up
+   =========================== */
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  /* Grid System */
+  .md\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  /* Display */
+  .md\:block { display: block; }
+  .md\:inline-block { display: inline-block; }
+  .md\:inline { display: inline; }
+  .md\:flex { display: flex; }
+  .md\:grid { display: grid; }
+  .md\:hidden { display: none; }
+  
+  /* Flex Direction */
+  .md\:flex-row { flex-direction: row; }
+  .md\:flex-col { flex-direction: column; }
+  
+  /* Text Alignment */
+  .md\:text-left { text-align: left; }
+  .md\:text-center { text-align: center; }
+  .md\:text-right { text-align: right; }
+  
+  /* Typography */
+  .md\:text-sm { font-size: var(--font-size-sm); }
+  .md\:text-base { font-size: var(--font-size-base); }
+  .md\:text-lg { font-size: var(--font-size-lg); }
+  .md\:text-xl { font-size: var(--font-size-xl); }
+  .md\:text-2xl { font-size: var(--font-size-2xl); }
+  
+  /* Spacing */
+  .md\:p-4 { padding: var(--spacing-lg); }
+  .md\:p-5 { padding: var(--spacing-xl); }
+  .md\:p-6 { padding: var(--spacing-2xl); }
+  .md\:px-4 { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+  .md\:px-5 { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+  .md\:px-6 { padding-left: var(--spacing-2xl); padding-right: var(--spacing-2xl); }
+  .md\:py-4 { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+  .md\:py-5 { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+  .md\:py-6 { padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-2xl); }
+  
+  /* Sidebar shows labels on tablets */
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+  
+  .sidebar .nav-label {
+    display: inline;
+  }
+  
+  .main-content {
+    margin-left: var(--sidebar-width);
+  }
+  
+  /* Form layouts on tablets */
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  /* Card grids on tablets */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===========================
+   LARGE DEVICES (LAPTOPS)
+   992px and up
+   =========================== */
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  /* Grid System */
+  .lg\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  
+  /* Display */
+  .lg\:block { display: block; }
+  .lg\:inline-block { display: inline-block; }
+  .lg\:inline { display: inline; }
+  .lg\:flex { display: flex; }
+  .lg\:grid { display: grid; }
+  .lg\:hidden { display: none; }
+  
+  /* Typography */
+  .lg\:text-base { font-size: var(--font-size-base); }
+  .lg\:text-lg { font-size: var(--font-size-lg); }
+  .lg\:text-xl { font-size: var(--font-size-xl); }
+  .lg\:text-2xl { font-size: var(--font-size-2xl); }
+  .lg\:text-3xl { font-size: var(--font-size-3xl); }
+  
+  /* Spacing */
+  .lg\:p-5 { padding: var(--spacing-xl); }
+  .lg\:p-6 { padding: var(--spacing-2xl); }
+  .lg\:px-5 { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+  .lg\:px-6 { padding-left: var(--spacing-2xl); padding-right: var(--spacing-2xl); }
+  .lg\:py-5 { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+  .lg\:py-6 { padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-2xl); }
+  
+  /* Card grids on large screens */
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Enhanced hover effects on larger screens */
+  .hover-lift:hover {
+    transform: translateY(-6px);
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.08);
+  }
+}
+
+/* ===========================
+   EXTRA LARGE DEVICES (DESKTOPS)
+   1200px and up
+   =========================== */
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+  
+  /* Grid System */
+  .xl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .xl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .xl\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .xl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .xl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  
+  /* Display */
+  .xl\:block { display: block; }
+  .xl\:inline-block { display: inline-block; }
+  .xl\:inline { display: inline; }
+  .xl\:flex { display: flex; }
+  .xl\:grid { display: grid; }
+  .xl\:hidden { display: none; }
+  
+  /* Typography */
+  .xl\:text-lg { font-size: var(--font-size-lg); }
+  .xl\:text-xl { font-size: var(--font-size-xl); }
+  .xl\:text-2xl { font-size: var(--font-size-2xl); }
+  .xl\:text-3xl { font-size: var(--font-size-3xl); }
+  .xl\:text-4xl { font-size: var(--font-size-4xl); }
+  
+  /* Spacing */
+  .xl\:p-6 { padding: var(--spacing-2xl); }
+  .xl\:px-6 { padding-left: var(--spacing-2xl); padding-right: var(--spacing-2xl); }
+  .xl\:py-6 { padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-2xl); }
+  
+  /* Card grids on extra large screens */
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  /* Maximum sidebar width on large screens */
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+  
+  .main-content {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+/* ===========================
+   XXL DEVICES (LARGE DESKTOPS)
+   1400px and up
+   =========================== */
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+  
+  /* Grid System */
+  .xxl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .xxl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .xxl\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .xxl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .xxl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .xxl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  
+  /* Typography */
+  .xxl\:text-xl { font-size: var(--font-size-xl); }
+  .xxl\:text-2xl { font-size: var(--font-size-2xl); }
+  .xxl\:text-3xl { font-size: var(--font-size-3xl); }
+  .xxl\:text-4xl { font-size: var(--font-size-4xl); }
+  
+  /* Enhanced spacing for large screens */
+  .xxl\:p-8 { padding: var(--spacing-3xl); }
+  .xxl\:px-8 { padding-left: var(--spacing-3xl); padding-right: var(--spacing-3xl); }
+  .xxl\:py-8 { padding-top: var(--spacing-3xl); padding-bottom: var(--spacing-3xl); }
+}
+
+/* ===========================
+   COMPONENT SPECIFIC RESPONSIVE RULES
+   =========================== */
+
+/* Sidebar Responsive Behavior */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+  }
+  
+  .sidebar.show {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+  
+  .sidebar-overlay.show {
+    display: block;
+  }
+}
+
+/* Form Responsive Behavior */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Card Responsive Behavior */
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .card-header {
+    padding: var(--spacing-md);
+  }
+  
+  .card-body {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Table Responsive Behavior */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table {
+    min-width: 600px;
+  }
+  
+  .table th,
+  .table td {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Navigation Responsive Behavior */
+@media (max-width: 768px) {
+  .nav-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-tab {
+    white-space: nowrap;
+    min-width: fit-content;
+  }
+}
+
+/* Button Responsive Behavior */
+@media (max-width: 576px) {
+  .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-sm);
+  }
+  
+  .btn-lg {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: var(--font-size-base);
+  }
+  
+  .btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Modal Responsive Behavior */
+@media (max-width: 768px) {
+  .modal-content {
+    margin: var(--spacing-md);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+  
+  .modal-header {
+    padding: var(--spacing-md);
+  }
+  
+  .modal-body {
+    padding: var(--spacing-md);
+  }
+  
+  .modal-footer {
+    padding: var(--spacing-md);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ===========================
+   TOUCH DEVICE OPTIMIZATIONS
+   =========================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch device specific styles */
+  .btn,
+  .nav-link,
+  .form-control {
+    min-height: 44px; /* Minimum touch target size */
+  }
+  
+  .hover-lift:hover {
+    transform: none; /* Disable hover effects on touch devices */
+  }
+  
+  .hover-scale:hover {
+    transform: none;
+  }
+  
+  /* Increase spacing for better touch interaction */
+  .nav-list {
+    gap: var(--spacing-sm);
+  }
+  
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* ===========================
+   PRINT RESPONSIVE STYLES
+   =========================== */
+
+@media print {
+  .sidebar,
+  .nav-tabs,
+  .btn,
+  .form-actions {
+    display: none !important;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  
+  .container {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  
+  .card {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+  
+  .text-primary {
+    color: #000 !important;
+  }
+  
+  .bg-primary {
+    background: transparent !important;
+  }
+}

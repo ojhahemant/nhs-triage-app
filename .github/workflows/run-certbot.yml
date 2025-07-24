@@ -1,0 +1,36 @@
+name: Run Certbot Manually
+
+on:
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  run_certbot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Certbot for triagemedical.org
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "--- Attempting to obtain/renew SSL certificate for triagemedical.org ---"
+            # Ensure Certbot has all necessary packages
+            sudo apt update -y
+            sudo apt install certbot python3-certbot-nginx -y
+
+            # Run Certbot command
+            sudo certbot --nginx -d triagemedical.org -d www.triagemedical.org --non-interactive --agree-tos --email ojhahemant@gmail.com --force-renewal
+
+            echo ""
+            echo "--- Verifying Certbot Certificates After Attempt ---"
+            sudo certbot certificates
+
+            echo ""
+            echo "--- Testing Nginx Configuration After Certbot ---"
+            sudo nginx -t
+
+            echo "--- Restarting Nginx Service After Certbot ---"
+            sudo systemctl restart nginx
+
+            echo "--- Certbot Execution Complete ---"
