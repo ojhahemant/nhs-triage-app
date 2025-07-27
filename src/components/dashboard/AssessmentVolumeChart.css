@@ -1,0 +1,95 @@
+/* AssessmentVolumeChart CSS */
+.volume-chart {
+  width: 100%;
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.main-line {
+  transition: stroke-width 0.3s ease;
+}
+
+.data-point {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.data-point:hover {
+  r: 7;
+  stroke-width: 4;
+}
+
+.data-point:hover + .data-point-inner {
+  r: 3;
+}
+
+.data-point:hover ~ .value-label,
+.data-point-inner:hover ~ .value-label {
+  opacity: 1 !important;
+}
+
+.value-label {
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.y-label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+}
+
+.x-axis-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 60px 0 60px;
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+.x-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .volume-chart {
+    padding: 0.75rem;
+  }
+  
+  .x-axis-labels {
+    padding: 0 40px;
+  }
+  
+  .x-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* Animation for chart loading */
+@keyframes drawLine {
+  from {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
+  }
+}
+
+.main-line {
+  animation: drawLine 2s ease-in-out;
+}

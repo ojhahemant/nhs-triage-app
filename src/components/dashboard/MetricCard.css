@@ -1,0 +1,70 @@
+/* MetricCard CSS */
+.metric-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.metric-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.metric-icon {
+  color: white;
+  padding: 0.75rem;
+  background: var(--nhs-blue);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 48, 135, 0.3);
+  width: 48px;
+  height: 48px;
+}
+
+.metric-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.5;
+}
+
+.metric-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.metric-trend {
+  font-size: 0.875rem;
+}
+
+.trend.positive {
+  color: #059669;
+}
+
+.trend.negative {
+  color: #dc2626;
+}
+
+.trend.neutral {
+  color: #6b7280;
+}

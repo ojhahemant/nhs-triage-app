@@ -1,0 +1,286 @@
+/* Main Layout Styles */
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+  color: white;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  background: #005eb8;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-icon-collapsed {
+  background: #005eb8;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.brand-text h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+.brand-text span {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Navigation Styles */
+.sidebar-nav {
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-bottom: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.nav-link.active {
+  background-color: rgba(0, 94, 184, 0.2);
+  color: white;
+  border-left-color: #005eb8;
+}
+
+.nav-link.coming-soon {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nav-link.coming-soon:hover {
+  background-color: transparent;
+  color: #cbd5e1;
+}
+
+.nav-icon {
+  min-width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.coming-soon-badge {
+  background: #f59e0b;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  background: #005eb8;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content.expanded {
+  margin-left: 80px;
+}
+
+/* Header Styles */
+.main-header {
+  background: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-button {
+  background: none;
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.header-button:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .main-content.expanded {
+    margin-left: 0;
+  }
+}
+
+/* Animation for smooth transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-area > * {
+  animation: fadeIn 0.3s ease-out;
+}

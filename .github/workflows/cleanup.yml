@@ -1,0 +1,45 @@
+name: Nginx Cleanup
+
+on:
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup Old Nginx Config
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "--- Identifying and Removing Old Nginx Configs ---"
+            # List files in sites-available to find medinnovations config
+            echo "Files in /etc/nginx/sites-available/:"
+            ls -l /etc/nginx/sites-available/
+
+            # Attempt to remove any config files related to medinnovations.duckdns.org
+            # Be careful here. We are trying to remove files by name.
+            # Common names would be "medinnovations", "medinnovations.duckdns.org", etc.
+            # If you know the exact file name (e.g., "medinnovations"), use that.
+            # Otherwise, this will attempt a pattern match.
+            echo "Attempting to remove /etc/nginx/sites-available/medinnovations.duckdns.org (or similar)"
+            sudo rm -f /etc/nginx/sites-available/medinnovations.duckdns.org || true
+            sudo rm -f /etc/nginx/sites-available/medinnovations || true # In case it was a simpler name
+
+            echo "Attempting to remove /etc/nginx/sites-enabled/medinnovations.duckdns.org (or similar)"
+            sudo rm -f /etc/nginx/sites-enabled/medinnovations.duckdns.org || true
+            sudo rm -f /etc/nginx/sites-enabled/medinnovations || true
+
+            # Clean up any leftover symlinks or config that Certbot might have created
+            echo "Searching for Certbot configurations for medinnovations.duckdns.org"
+            sudo certbot delete --cert-name medinnovations.duckdns.org --non-interactive || true
+
+            echo "--- Testing Nginx Configuration ---"
+            sudo nginx -t
+
+            echo "--- Restarting Nginx Service ---"
+            sudo systemctl restart nginx
+
+            echo "--- Cleanup Complete ---"

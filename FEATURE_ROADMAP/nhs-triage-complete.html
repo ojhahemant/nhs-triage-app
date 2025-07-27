@@ -1,0 +1,3228 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHS Plastic Surgery Triage System - Enhanced Demo</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTkhTIFBsYXN0aWMgU3VyZ2VyeSBUcmlhZ2UiLCJzaG9ydF9uYW1lIjoiTkhTIFRyaWFnZSIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDA1ZWI4IiwidGhlbWVfY29sb3IiOiIjMDA1ZWI4In0=">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI0IiBoZWlnaHQ9IjEyNCIgdmlld0JveD0iMCAwIDM4MyAzODMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjM4MyIgaGVpZ2h0PSIzODMiIGZpbGw9IiMwMDViOCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE4MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj7imrUgPC90ZXh0Pjwvc3ZnPg==">
+    <style>
+        /* Enhanced CSS Variables */
+        :root {
+            --color-primary: #005eb8;
+            --color-secondary: #41b883;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-urgent: #dc2626;
+            --color-routine: #f59e0b;
+            --color-non-priority: #10b981;
+            --color-text: #1f2937;
+            --color-text-light: #6b7280;
+            --color-background: #f9fafb;
+            --color-white: #ffffff;
+            --color-border: #e5e7eb;
+            --color-sidebar: #f8fafc;
+            --color-header: #1e293b;
+            --font-size-base: 16px;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+            --z-modal: 1000;
+            --z-overlay: 999;
+            --z-dropdown: 500;
+        }
+
+        /* Base styles enhanced */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            overflow-x: hidden;
+        }
+
+        /* Enhanced layout */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--color-sidebar);
+            border-right: 1px solid var(--color-border);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: var(--z-dropdown);
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            transition: var(--transition);
+        }
+
+        .main-content.expanded {
+            margin-left: 80px;
+        }
+
+        /* Enhanced header */
+        .header {
+            background: var(--color-header);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: var(--z-dropdown);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Enhanced sidebar navigation */
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--color-text);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Enhanced content area */
+        .content-wrapper {
+            padding: 24px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Enhanced cards */
+        .card {
+            background: var(--color-white);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--color-border);
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* NHS Spine Integration Panel */
+        .spine-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .spine-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .spine-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Patient lookup form */
+        .patient-lookup {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .nhs-number-input {
+            position: relative;
+        }
+
+        .nhs-number-input input {
+            padding-left: 40px;
+        }
+
+        .nhs-number-input::before {
+            content: "NHS";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: var(--color-primary);
+            z-index: 1;
+        }
+
+        /* Image analysis panel */
+        .image-analysis {
+            border: 2px dashed var(--color-border);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            text-align: center;
+            margin: 20px 0;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .image-analysis.drag-over {
+            border-color: var(--color-primary);
+            background: rgba(0, 94, 184, 0.05);
+        }
+
+        .image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+            margin: 16px auto;
+            box-shadow: var(--shadow);
+        }
+
+        .ai-analysis-result {
+            background: #f0f8ff;
+            border: 1px solid #b3d7ff;
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        /* Referral tracking */
+        .referral-card {
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .referral-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .referral-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-draft { background: #fef3c7; color: #92400e; }
+        .status-submitted { background: #dbeafe; color: #1e40af; }
+        .status-reviewed { background: #d1fae5; color: #065f46; }
+        .status-urgent { background: #fee2e2; color: #991b1b; }
+
+        /* Messaging system */
+        .messaging-panel {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .messages-header {
+            background: var(--color-primary);
+            color: white;
+            padding: 16px;
+            font-weight: 600;
+        }
+
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8fafc;
+        }
+
+        .message {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .message.sent {
+            background: var(--color-primary);
+            color: white;
+            margin-left: 20%;
+        }
+
+        .message-input {
+            display: flex;
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .message-input input {
+            flex: 1;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            margin-right: 8px;
+        }
+
+        /* Bulk upload */
+        .upload-zone {
+            border: 3px dashed var(--color-border);
+            border-radius: var(--border-radius);
+            padding: 48px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .upload-zone.drag-over {
+            border-color: var(--color-primary);
+            background: rgba(0, 94, 184, 0.05);
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: var(--color-success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Analytics widgets */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: var(--color-white);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--color-primary);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+
+        .metric-change.positive {
+            color: var(--color-success);
+        }
+
+        .metric-change.negative {
+            color: var(--color-error);
+        }
+
+        /* Audit trail */
+        .audit-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .audit-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-background);
+            font-size: 18px;
+        }
+
+        .audit-content {
+            flex: 1;
+        }
+
+        .audit-action {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .audit-meta {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+
+        /* Tutorial overlay */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: var(--z-modal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-popup {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .tutorial-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-text-light);
+        }
+
+        /* Guidelines panel */
+        .guidelines-panel {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .guidelines-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 12px;
+        }
+
+        .guidelines-content {
+            color: #15803d;
+            line-height: 1.6;
+        }
+
+        /* Enhanced forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(0, 94, 184, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .required {
+            color: var(--color-error);
+        }
+
+        /* Enhanced buttons */
+        .btn {
+            padding: 12px 24px;
+            border: 2px solid;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 48px;
+            justify-content: center;
+        }
+
+        .btn:focus {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #003d82;
+            border-color: #003d82;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--color-warning);
+            border-color: var(--color-warning);
+            color: white;
+        }
+
+        .btn-error {
+            background: var(--color-error);
+            border-color: var(--color-error);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            max-width: 400px;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            z-index: var(--z-modal);
+            animation: slideIn 0.3s ease-out;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .notification.success {
+            background: var(--color-success);
+        }
+
+        .notification.error {
+            background: var(--color-error);
+        }
+
+        .notification.warning {
+            background: var(--color-warning);
+        }
+
+        .notification.info {
+            background: var(--color-primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Accessibility toolbar */
+        .accessibility-toolbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: var(--color-white);
+            padding: 12px;
+            border-left: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            z-index: var(--z-modal);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 320px;
+            box-shadow: var(--shadow);
+        }
+
+        .accessibility-toolbar button,
+        .accessibility-toolbar select {
+            padding: 8px;
+            border: 1px solid var(--color-border);
+            background: var(--color-white);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .accessibility-toolbar button:hover,
+        .accessibility-toolbar button:focus {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 100%;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Skip links */
+        .skip-links {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .skip-links a {
+            position: absolute;
+            background: var(--color-primary);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            z-index: var(--z-modal);
+        }
+
+        .skip-links a:focus {
+            top: 10px;
+            left: 10px;
+        }
+
+        /* Theme variations */
+        [data-theme="high-contrast"] {
+            --color-primary: #000000;
+            --color-background: #ffffff;
+            --color-text: #000000;
+            --color-border: #000000;
+        }
+
+        [data-theme="dark"] {
+            --color-primary: #3b82f6;
+            --color-text: #f9fafb;
+            --color-background: #1f2937;
+            --color-white: #374151;
+            --color-border: #4b5563;
+            --color-sidebar: #374151;
+            --color-header: #111827;
+        }
+
+        /* Focus indicators */
+        *:focus {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        /* Print styles */
+        @media print {
+            .sidebar,
+            .accessibility-toolbar,
+            .tutorial-overlay {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            * {
+                background: white !important;
+                color: black !important;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .conversation-item {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .conversation-item.active {
+            /* styling handled in HTML */
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip links -->
+    <div class="skip-links">
+        <a href="#main-content">Skip to main content</a>
+        <a href="#sidebar-nav">Skip to navigation</a>
+    </div>
+
+    <!-- Accessibility toolbar -->
+    <div class="accessibility-toolbar" role="toolbar" aria-label="Accessibility settings">
+        <button onclick="toggleHighContrast()" aria-label="Toggle high contrast mode" title="High Contrast">
+            🔳
+        </button>
+        <button onclick="increaseFontSize()" aria-label="Increase font size" title="Larger Text">
+            🔍+
+        </button>
+        <button onclick="decreaseFontSize()" aria-label="Decrease font size" title="Smaller Text">
+            🔍-
+        </button>
+        <button onclick="toggleReducedMotion()" aria-label="Toggle animations" title="Reduce Motion">
+            ⏸️
+        </button>
+        <select onchange="changeLanguage(this.value)" aria-label="Select language">
+            <option value="en">English</option>
+            <option value="cy">Cymraeg</option>
+            <option value="ur">اردو</option>
+            <option value="ar">العربية</option>
+        </select>
+        <button onclick="startTutorial()" aria-label="Start interactive tutorial" title="Help Tutorial">
+            ❓
+        </button>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">⚕</div>
+                <div>
+                    <div style="font-weight: 700;">NHS Triage</div>
+                    <div style="font-size: 0.875rem; color: var(--color-text-light);">v2.1.0</div>
+                </div>
+            </div>
+
+            <nav id="sidebar-nav" aria-label="Main navigation">
+                <ul class="sidebar-nav">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" onclick="showPage('assessment')" role="tab">
+                            <span class="nav-icon">🩺</span>
+                            <span>Clinical Assessment</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('referrals')" role="tab">
+                            <span class="nav-icon">📋</span>
+                            <span>Referral Tracking</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('messaging')" role="tab">
+                            <span class="nav-icon">💬</span>
+                            <span>Secure Messaging</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('bulk-upload')" role="tab">
+                            <span class="nav-icon">📤</span>
+                            <span>Bulk Upload</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('patient-portal')" role="tab">
+                            <span class="nav-icon">👤</span>
+                            <span>Patient Portal</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('analytics')" role="tab">
+                            <span class="nav-icon">📊</span>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('guidelines')" role="tab">
+                            <span class="nav-icon">📚</span>
+                            <span>Clinical Guidelines</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showPage('audit')" role="tab">
+                            <span class="nav-icon">🔍</span>
+                            <span>Audit Trail</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Quick actions -->
+            <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--color-border);">
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;" onclick="showPage('assessment')">
+                    ➕ New Assessment
+                </button>
+                <button class="btn btn-secondary" style="width: 100%;" onclick="showNotification('Emergency support contacted', 'success')">
+                    🚨 Emergency Support
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content" id="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button onclick="toggleSidebar()" aria-label="Toggle sidebar" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">
+                        ☰
+                    </button>
+                    <h1 class="header-title">NHS Plastic Surgery Triage System</h1>
+                </div>
+                <div class="header-right">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 0.875rem; opacity: 0.9;">Dr. Sarah Chen</span>
+                        <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            👩‍⚕️
+                        </div>
+                    </div>
+                    <div id="connection-status" style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                        <span style="font-size: 0.875rem;">NHS Spine Connected</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Clinical Assessment Page -->
+                <div id="assessment-page" class="page active">
+                    <div class="page-header">
+                        <h2 class="page-title">Clinical Assessment & Triage</h2>
+                        <p class="page-subtitle">AI-powered triage with NHS Spine integration and advanced image analysis</p>
+                    </div>
+
+                    <!-- NHS Spine Integration -->
+                    <div class="spine-panel">
+                        <div class="spine-status">
+                            <span>🔗</span>
+                            <span>NHS Spine Integration Active</span>
+                        </div>
+                        <p style="margin-bottom: 16px; opacity: 0.9;">Automatically populate patient data using NHS number lookup via Personal Demographics Service (PDS)</p>
+                        
+                        <div class="patient-lookup">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="nhs-number" style="color: white; margin-bottom: 8px;">NHS Number</label>
+                                <div class="nhs-number-input">
+                                    <input 
+                                        type="text" 
+                                        id="nhs-number"
+                                        placeholder="123 456 7890"
+                                        maxlength="12"
+                                        style="background: rgba(255,255,255,0.9);"
+                                        oninput="formatNHSNumber(this)"
+                                    >
+                                </div>
+                            </div>
+                            <button class="btn" style="background: rgba(255,255,255,0.2); border-color: white; color: white;" onclick="lookupPatient()">
+                                🔍 Lookup Patient
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Patient Information (populated from NHS Spine) -->
+                    <div id="patient-info" class="card" style="display: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>👤</span>
+                                Patient Information
+                            </h3>
+                            <span class="badge" style="background: var(--color-success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">
+                                ✓ Verified via NHS Spine
+                            </span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="patient-name" readonly style="background: #f9fafb;">
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="text" id="patient-dob" readonly style="background: #f9fafb;">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>GP Practice</label>
+                                <input type="text" id="patient-gp" readonly style="background: #f9fafb;">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" id="patient-address" readonly style="background: #f9fafb;">
+                            </div>
+                        </div>
+                        
+                        <!-- Medical History from GP Systems -->
+                        <div style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 12px; color: var(--color-primary);">📋 Medical History (GP EHR Integration)</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <strong>Allergies:</strong>
+                                    <div id="patient-allergies" style="font-size: 0.875rem; color: var(--color-text-light);"></div>
+                                </div>
+                                <div>
+                                    <strong>Current Medications:</strong>
+                                    <div id="patient-medications" style="font-size: 0.875rem; color: var(--color-text-light);"></div>
+                                </div>
+                                <div>
+                                    <strong>Past Medical History:</strong>
+                                    <div id="patient-history" style="font-size: 0.875rem; color: var(--color-text-light);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Assessment Form -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🩺</span>
+                                Clinical Assessment
+                            </h3>
+                            <div>
+                                <button class="btn btn-secondary" onclick="saveDraft()" style="margin-right: 8px;">
+                                    💾 Save Draft
+                                </button>
+                                <button class="btn btn-secondary" onclick="loadDraft()">
+                                    📂 Load Draft
+                                </button>
+                            </div>
+                        </div>
+
+                        <form id="assessment-form" onsubmit="performAssessment(event)">
+                            <div class="form-group">
+                                <label for="clinical-description">
+                                    Clinical Description <span class="required">*</span>
+                                </label>
+                                <textarea 
+                                    id="clinical-description" 
+                                    rows="4" 
+                                    placeholder="Describe the clinical presentation, symptoms, lesion characteristics, patient concerns, and any relevant history..."
+                                    required
+                                    aria-describedby="description-help"
+                                ></textarea>
+                                <div id="description-help" style="font-size: 0.875rem; color: var(--color-text-light); margin-top: 4px;">
+                                    Include: appearance, size, location, changes over time, associated symptoms, patient concerns
+                                </div>
+                            </div>
+
+                            <!-- AI Image Analysis -->
+                            <div class="form-group">
+                                <label>AI-Powered Image Analysis</label>
+                                <div class="image-analysis" id="image-drop-zone" ondrop="handleImageDrop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" onclick="document.getElementById('image-upload').click()">
+                                    <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
+                                    <h4>Drop image here or click to upload</h4>
+                                    <p style="color: var(--color-text-light); margin: 8px 0;">
+                                        Supported: JPG, PNG, HEIC • Max 10MB • AI will analyze for malignancy risk indicators
+                                    </p>
+                                    <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                                    <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); document.getElementById('image-upload').click()">
+                                        Choose Image
+                                    </button>
+                                    <div style="margin-top: 12px; font-size: 0.75rem; color: var(--color-text-light);">
+                                        ⚠️ AI analysis is for clinical decision support only and does not replace professional judgment
+                                    </div>
+                                </div>
+                                
+                                <div id="image-analysis-result" class="ai-analysis-result" style="display: none;">
+                                    <h4 style="color: var(--color-primary); margin-bottom: 12px;">🤖 AI Image Analysis Results</h4>
+                                    <div id="ai-image-findings"></div>
+                                    <div style="margin-top: 12px; padding: 12px; background: #fef3c7; border-radius: 4px; font-size: 0.875rem;">
+                                        <strong>Clinical Disclaimer:</strong> This AI analysis is for decision support only. Final diagnosis must be made by qualified clinician.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="urgency-indicators">Urgency Indicators</label>
+                                    <select id="urgency-indicators" multiple style="height: 100px;">
+                                        <option value="bleeding">Active bleeding</option>
+                                        <option value="rapid-growth">Rapid growth/change</option>
+                                        <option value="pain">Significant pain</option>
+                                        <option value="ulceration">Ulceration present</option>
+                                        <option value="functional-impact">Functional impairment</option>
+                                        <option value="patient-anxiety">High patient anxiety</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ai-model">AI Analysis Model</label>
+                                    <select id="ai-model">
+                                        <option value="gpt-4o">GPT-4o (Best Quality)</option>
+                                        <option value="gpt-4o-mini">GPT-4o Mini (Faster)</option>
+                                        <option value="claude-3">Claude 3 (Alternative)</option>
+                                        <option value="custom-nhs">NHS Custom Model</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary" id="assess-btn">
+                                    <span>🧠</span>
+                                    Perform AI Assessment
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="generateSummary()">
+                                    📄 Generate Summary
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="showGuidelines()">
+                                    📚 View Guidelines
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Assessment Results -->
+                    <div id="assessment-results" class="card" style="display: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🤖</span>
+                                AI Assessment Results
+                            </h3>
+                            <div>
+                                <span id="ai-confidence" style="font-size: 0.875rem; color: var(--color-text-light);"></span>
+                            </div>
+                        </div>
+
+                        <div id="priority-result" style="padding: 20px; border-radius: var(--border-radius); margin-bottom: 20px; color: white;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span id="priority-icon" style="font-size: 24px;"></span>
+                                <div>
+                                    <div id="priority-text" style="font-size: 1.25rem; font-weight: 700;"></div>
+                                    <div id="priority-timeframe" style="opacity: 0.9;"></div>
+                                </div>
+                                <div style="margin-left: auto;">
+                                    <div style="font-size: 0.875rem; opacity: 0.9;">AI Confidence</div>
+                                    <div id="confidence-percentage" style="font-size: 1.5rem; font-weight: bold;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style="margin-bottom: 12px;">🧠 AI Clinical Reasoning</h4>
+                            <div id="ai-reasoning" style="background: #f8fafc; padding: 16px; border-radius: var(--border-radius); border-left: 4px solid var(--color-primary);"></div>
+                        </div>
+
+                        <div id="decision-support" style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 12px;">📋 Clinical Decision Support</h4>
+                            <div id="clinical-recommendations"></div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="createReferral()">
+                                📤 Create Referral
+                            </button>
+                            <button class="btn btn-secondary" onclick="generateReferralLetter()">
+                                📄 Generate Referral Letter
+                            </button>
+                            <button class="btn btn-secondary" onclick="sendToColleague()">
+                                👥 Share with Colleague
+                            </button>
+                            <button class="btn btn-secondary" onclick="downloadReport()">
+                                💾 Download Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral Tracking Page -->
+                <div id="referrals-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Referral Tracking Dashboard</h2>
+                        <p class="page-subtitle">Monitor the status and progress of all referrals</p>
+                    </div>
+
+                    <!-- Quick stats -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="total-referrals">24</div>
+                            <div class="metric-label">Total Referrals</div>
+                            <div class="metric-change positive">+3 this week</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="urgent-referrals">5</div>
+                            <div class="metric-label">Urgent Cases</div>
+                            <div class="metric-change negative">2 overdue</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">1.2</div>
+                            <div class="metric-label">Avg Days to Review</div>
+                            <div class="metric-change positive">-0.3 from last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">94%</div>
+                            <div class="metric-label">Accuracy Rate</div>
+                            <div class="metric-change positive">+2% this month</div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🔍</span>
+                                Filter Referrals
+                            </h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="status-filter" onchange="filterReferrals()">
+                                    <option value="">All Statuses</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="submitted">Submitted</option>
+                                    <option value="reviewed">Under Review</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Priority</label>
+                                <select id="priority-filter" onchange="filterReferrals()">
+                                    <option value="">All Priorities</option>
+                                    <option value="urgent">Urgent</option>
+                                    <option value="routine">Routine</option>
+                                    <option value="non-priority">Non-Priority</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <select id="date-filter" onchange="filterReferrals()">
+                                    <option value="week">Last Week</option>
+                                    <option value="month">Last Month</option>
+                                    <option value="quarter">Last Quarter</option>
+                                    <option value="all">All Time</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Search</label>
+                                <input type="text" id="search-referrals" placeholder="Patient name or NHS number" oninput="filterReferrals()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Referrals list -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📋</span>
+                                Recent Referrals
+                            </h3>
+                            <button class="btn btn-primary" onclick="showPage('assessment')">
+                                ➕ New Referral
+                            </button>
+                        </div>
+                        <div id="referrals-list">
+                            <!-- Referrals will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messaging Page -->
+                <div id="messaging-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Secure Messaging</h2>
+                        <p class="page-subtitle">Communicate securely with plastic surgery teams and colleagues</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px;">
+                        <!-- Conversations list -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>💬</span>
+                                    Conversations
+                                </h3>
+                                <button class="btn btn-primary" onclick="startNewConversation()">
+                                    ➕ New
+                                </button>
+                            </div>
+                            <div id="conversations-list">
+                                <div class="conversation-item active" onclick="selectConversation('conv1')">
+                                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; background: var(--color-primary); color: white;">
+                                        <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                            👨‍⚕️
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600;">Dr. James Wilson</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.9;">Plastic Surgery Team</div>
+                                            <div style="font-size: 0.75rem; opacity: 0.8;">2 hours ago</div>
+                                        </div>
+                                        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
+                                    </div>
+                                </div>
+                                <div class="conversation-item" onclick="selectConversation('conv2')">
+                                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+                                        <div style="width: 40px; height: 40px; background: var(--color-background); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                            👩‍⚕️
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600;">Dr. Sarah Chen</div>
+                                            <div style="font-size: 0.875rem; color: var(--color-text-light);">Dermatology</div>
+                                            <div style="font-size: 0.75rem; color: var(--color-text-light);">1 day ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active conversation -->
+                        <div class="card">
+                            <div class="messaging-panel">
+                                <div class="messages-header">
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                            👨‍⚕️
+                                        </div>
+                                        <div>
+                                            <div>Dr. James Wilson</div>
+                                            <div style="font-size: 0.875rem; opacity: 0.8;">Plastic Surgery Consultant</div>
+                                        </div>
+                                        <div style="margin-left: auto; display: flex; gap: 8px;">
+                                            <button style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px; border-radius: 4px; cursor: pointer;" title="Video Call">
+                                                📹
+                                            </button>
+                                            <button style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px; border-radius: 4px; cursor: pointer;" title="Share Screen">
+                                                🖥️
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="messages-list" id="messages-container">
+                                    <div class="message">
+                                        <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 4px;">Dr. James Wilson • 2 hours ago</div>
+                                        <div>Thanks for the referral. The images show concerning asymmetry and irregular borders. I agree with the urgent classification. Can you send the patient for appointment this week?</div>
+                                    </div>
+                                    <div class="message sent">
+                                        <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 4px;">You • 1 hour ago</div>
+                                        <div>Absolutely. Patient has been contacted and appointment scheduled for Thursday 2pm. I've sent updated medical history via secure link.</div>
+                                    </div>
+                                    <div class="message">
+                                        <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 4px;">Dr. James Wilson • 30 mins ago</div>
+                                        <div>Perfect. I'll review the history before the appointment. Good catch on this one - the AI triage was spot on.</div>
+                                    </div>
+                                </div>
+                                <div class="message-input">
+                                    <input type="text" placeholder="Type your message..." id="message-text" onkeypress="handleMessageKeypress(event)">
+                                    <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Upload Page -->
+                <div id="bulk-upload-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Bulk Referral Upload</h2>
+                        <p class="page-subtitle">Upload multiple referrals via CSV or batch processing</p>
+                    </div>
+
+                    <!-- Upload Instructions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📋</span>
+                                Upload Instructions
+                            </h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                            <div>
+                                <h4 style="color: var(--color-primary); margin-bottom: 12px;">Required CSV Format</h4>
+                                <ul style="margin-left: 20px; line-height: 1.8;">
+                                    <li>NHS Number (mandatory)</li>
+                                    <li>Patient Name</li>
+                                    <li>Date of Birth</li>
+                                    <li>Clinical Description</li>
+                                    <li>Urgency Indicators</li>
+                                    <li>GP Practice Code</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--color-primary); margin-bottom: 12px;">Processing Features</h4>
+                                <ul style="margin-left: 20px; line-height: 1.8;">
+                                    <li>Automatic NHS Spine validation</li>
+                                    <li>AI triage for each referral</li>
+                                    <li>Duplicate detection</li>
+                                    <li>Error reporting and correction</li>
+                                    <li>Batch approval workflow</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-secondary" onclick="downloadTemplate()">
+                                📥 Download CSV Template
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewSampleData()">
+                                👁️ View Sample Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📤</span>
+                                Upload Referrals
+                            </h3>
+                        </div>
+                        <div class="upload-zone" id="bulk-upload-zone" ondrop="handleBulkDrop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" onclick="document.getElementById('bulk-file-input').click()">
+                            <div style="font-size: 64px; margin-bottom: 16px;">📁</div>
+                            <h3>Drop CSV file here or click to browse</h3>
+                            <p style="color: var(--color-text-light); margin: 16px 0;">
+                                Supported formats: CSV, Excel (.xlsx) • Maximum 500 referrals per batch
+                            </p>
+                            <input type="file" id="bulk-file-input" accept=".csv,.xlsx" style="display: none;" onchange="handleBulkUpload(event)">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); document.getElementById('bulk-file-input').click()">
+                                Choose File
+                            </button>
+                        </div>
+
+                        <div id="upload-progress-section" style="display: none; margin-top: 20px;">
+                            <h4 style="margin-bottom: 12px;">Processing Progress</h4>
+                            <div class="upload-progress">
+                                <div class="upload-progress-bar" id="upload-progress-bar"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--color-text-light);">
+                                <span id="progress-text">Processing...</span>
+                                <span id="progress-percentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Results -->
+                    <div id="bulk-results" class="card" style="display: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>✅</span>
+                                Processing Results
+                            </h3>
+                        </div>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value" id="processed-count">0</div>
+                                <div class="metric-label">Successfully Processed</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="error-count" style="color: var(--color-error);">0</div>
+                                <div class="metric-label">Errors Found</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="urgent-count" style="color: var(--color-urgent);">0</div>
+                                <div class="metric-label">Urgent Cases</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="validation-count" style="color: var(--color-warning);">0</div>
+                                <div class="metric-label">Need Validation</div>
+                            </div>
+                        </div>
+
+                        <div id="error-details" style="margin-top: 20px;">
+                            <h4 style="margin-bottom: 12px;">Error Details</h4>
+                            <div id="error-list"></div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="approveAllValid()">
+                                ✅ Approve All Valid
+                            </button>
+                            <button class="btn btn-secondary" onclick="downloadErrorReport()">
+                                📥 Download Error Report
+                            </button>
+                            <button class="btn btn-secondary" onclick="reviewIndividually()">
+                                👀 Review Individually
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Portal Page -->
+                <div id="patient-portal-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Patient Engagement Portal</h2>
+                        <p class="page-subtitle">Generate patient communications and track engagement</p>
+                    </div>
+
+                    <!-- Patient Status Generator -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>👤</span>
+                                Patient Status Page Generator
+                            </h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Select Patient</label>
+                                <select id="patient-select" onchange="generatePatientStatus()">
+                                    <option value="">Choose patient...</option>
+                                    <option value="patient1">John Smith (NHS: 123 456 7890)</option>
+                                    <option value="patient2">Mary Johnson (NHS: 098 765 4321)</option>
+                                    <option value="patient3">David Brown (NHS: 555 123 4567)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status Update Type</label>
+                                <select id="status-type">
+                                    <option value="referral-received">Referral Received</option>
+                                    <option value="under-review">Under Review</option>
+                                    <option value="appointment-scheduled">Appointment Scheduled</option>
+                                    <option value="additional-info-needed">Additional Information Needed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="generatePatientStatus()">
+                                📄 Generate Status Page
+                            </button>
+                            <button class="btn btn-secondary" onclick="previewEmail()">
+                                📧 Preview Email
+                            </button>
+                            <button class="btn btn-secondary" onclick="sendPatientUpdate()">
+                                📤 Send Update
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Generated Patient Status -->
+                    <div id="patient-status-preview" class="card" style="display: none;">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>👁️</span>
+                                Patient Status Preview
+                            </h3>
+                            <button class="btn btn-secondary" onclick="copyStatusLink()">
+                                🔗 Copy Link
+                            </button>
+                        </div>
+                        <div style="border: 2px solid var(--color-border); border-radius: var(--border-radius); padding: 24px; background: #f8fafc;">
+                            <div id="patient-status-content">
+                                <!-- Generated content will appear here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Automated Instructions Generator -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📋</span>
+                                Automated Patient Instructions
+                            </h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Instruction Type</label>
+                                <select id="instruction-type" onchange="updateInstructions()">
+                                    <option value="pre-appointment">Pre-Appointment Preparation</option>
+                                    <option value="post-assessment">Post-Assessment Care</option>
+                                    <option value="wound-care">Wound Care Instructions</option>
+                                    <option value="medication">Medication Guidelines</option>
+                                    <option value="follow-up">Follow-up Requirements</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Priority Level</label>
+                                <select id="priority-level" onchange="updateInstructions()">
+                                    <option value="urgent">Urgent</option>
+                                    <option value="routine">Routine</option>
+                                    <option value="non-priority">Non-Priority</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="generated-instructions" style="background: #f0f8ff; border: 1px solid #b3d7ff; border-radius: var(--border-radius); padding: 16px; margin: 16px 0;">
+                            <h4 style="color: var(--color-primary); margin-bottom: 12px;">Generated Instructions</h4>
+                            <div id="instruction-content">
+                                Select instruction type and priority to generate personalized patient guidance.
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="customizeInstructions()">
+                                ✏️ Customize
+                            </button>
+                            <button class="btn btn-secondary" onclick="previewInstructions()">
+                                👁️ Preview
+                            </button>
+                            <button class="btn btn-secondary" onclick="sendInstructions()">
+                                📤 Send to Patient
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Page -->
+                <div id="analytics-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Triage Analytics Dashboard</h2>
+                        <p class="page-subtitle">Comprehensive metrics and performance insights</p>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">247</div>
+                            <div class="metric-label">Total Assessments</div>
+                            <div class="metric-change positive">+23% vs last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">94.2%</div>
+                            <div class="metric-label">AI Accuracy Rate</div>
+                            <div class="metric-change positive">+1.2% improvement</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">1.8 hrs</div>
+                            <div class="metric-label">Avg Processing Time</div>
+                            <div class="metric-change positive">-0.3 hrs faster</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">4.7/5.0</div>
+                            <div class="metric-label">User Satisfaction</div>
+                            <div class="metric-change positive">+0.2 rating</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts placeholder -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>📈</span>
+                                    Assessment Volume Trends
+                                </h3>
+                                <select style="padding: 4px 8px; border: 1px solid var(--color-border); border-radius: 4px;">
+                                    <option>Last 30 days</option>
+                                    <option>Last 90 days</option>
+                                    <option>Last year</option>
+                                </select>
+                            </div>
+                            <div style="height: 300px; background: linear-gradient(45deg, #f3f4f6 25%, transparent 25%), linear-gradient(-45deg, #f3f4f6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f3f4f6 75%), linear-gradient(-45deg, transparent 75%, #f3f4f6 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; border: 2px dashed var(--color-border); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; color: var(--color-text-light); font-weight: 600;">
+                                Interactive Assessment Volume Chart
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>🎯</span>
+                                    Priority Distribution
+                                </h3>
+                            </div>
+                            <div style="height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+                                <div style="width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--color-urgent) 0deg 72deg, var(--color-warning) 72deg 216deg, var(--color-success) 216deg 360deg); display: flex; align-items: center; justify-content: center;">
+                                    <div style="width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                        247
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.875rem;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="width: 12px; height: 12px; background: var(--color-urgent); border-radius: 2px;"></div>
+                                        <span>Urgent (20%)</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="width: 12px; height: 12px; background: var(--color-warning); border-radius: 2px;"></div>
+                                        <span>Routine (60%)</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="width: 12px; height: 12px; background: var(--color-success); border-radius: 2px;"></div>
+                                        <span>Non-Priority (20%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Performance Metrics -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🤖</span>
+                                AI Model Performance
+                            </h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                            <div style="text-align: center; padding: 20px; background: var(--color-background); border-radius: var(--border-radius);">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--color-success);">94.2%</div>
+                                <div style="color: var(--color-text-light);">Accuracy</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: var(--color-background); border-radius: var(--border-radius);">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--color-primary);">87.5%</div>
+                                <div style="color: var(--color-text-light);">Sensitivity</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: var(--color-background); border-radius: var(--border-radius);">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--color-warning);">92.1%</div>
+                                <div style="color: var(--color-text-light);">Specificity</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: var(--color-background); border-radius: var(--border-radius);">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--color-success);">89.8%</div>
+                                <div style="color: var(--color-text-light);">F1 Score</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Guidelines Page -->
+                <div id="guidelines-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Clinical Guidelines</h2>
+                        <p class="page-subtitle">NHS and specialty-specific guidance for plastic surgery referrals</p>
+                    </div>
+
+                    <!-- Search Guidelines -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🔍</span>
+                                Search Guidelines
+                            </h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Search Topic</label>
+                                <input type="text" id="guideline-search" placeholder="e.g., melanoma, basal cell carcinoma, wound care" oninput="searchGuidelines()">
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="guideline-category" onchange="filterGuidelines()">
+                                    <option value="">All Categories</option>
+                                    <option value="malignancy">Malignancy Assessment</option>
+                                    <option value="benign">Benign Lesions</option>
+                                    <option value="trauma">Trauma & Reconstruction</option>
+                                    <option value="cosmetic">Cosmetic Procedures</option>
+                                    <option value="pediatric">Pediatric Cases</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Guidelines -->
+                    <div class="guidelines-panel">
+                        <div class="guidelines-header">
+                            <span>📚</span>
+                            <span>NICE Guidance: Melanoma Assessment and Management</span>
+                        </div>
+                        <div class="guidelines-content">
+                            <p><strong>Key Points for Urgent Referral (2-week wait):</strong></p>
+                            <ul style="margin-left: 20px;">
+                                <li>Suspicious pigmented lesion with recent changes</li>
+                                <li>Lesion >7mm diameter with irregular shape/border</li>
+                                <li>New mole in person >50 years</li>
+                                <li>Changing mole - size, shape, color, texture</li>
+                                <li>Signs of inflammation around lesion</li>
+                            </ul>
+                            <div style="margin-top: 12px;">
+                                <button class="btn btn-secondary" onclick="viewFullGuideline('nice-melanoma')">
+                                    📖 View Full Guidance
+                                </button>
+                                <button class="btn btn-secondary" onclick="addToFavorites('nice-melanoma')">
+                                    ⭐ Add to Favorites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guidelines Categories -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>🎯</span>
+                                    Urgent Referral Criteria
+                                </h3>
+                            </div>
+                            <div id="urgent-guidelines">
+                                <div style="padding: 12px; border-left: 4px solid var(--color-urgent); background: #fef2f2; border-radius: 4px; margin-bottom: 12px;">
+                                    <strong>Suspected Malignancy</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">ABCDE criteria, bleeding, ulceration, recent changes</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('malignancy')">View Details</button>
+                                </div>
+                                <div style="padding: 12px; border-left: 4px solid var(--color-urgent); background: #fef2f2; border-radius: 4px; margin-bottom: 12px;">
+                                    <strong>Functional Impairment</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">Vision, breathing, eating, activities of daily living</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('functional')">View Details</button>
+                                </div>
+                                <div style="padding: 12px; border-left: 4px solid var(--color-urgent); background: #fef2f2; border-radius: 4px;">
+                                    <strong>Trauma Cases</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">Complex wounds, hand injuries, facial trauma</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('trauma')">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span>⏰</span>
+                                    Routine Referral Guidelines
+                                </h3>
+                            </div>
+                            <div id="routine-guidelines">
+                                <div style="padding: 12px; border-left: 4px solid var(--color-warning); background: #fffbeb; border-radius: 4px; margin-bottom: 12px;">
+                                    <strong>Benign Lesions</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">Lipomas, cysts, seborrheic keratoses</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('benign')">View Details</button>
+                                </div>
+                                <div style="padding: 12px; border-left: 4px solid var(--color-warning); background: #fffbeb; border-radius: 4px; margin-bottom: 12px;">
+                                    <strong>Scar Management</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">Keloids, hypertrophic scars, contractures</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('scars')">View Details</button>
+                                </div>
+                                <div style="padding: 12px; border-left: 4px solid var(--color-warning); background: #fffbeb; border-radius: 4px;">
+                                    <strong>Reconstruction</strong>
+                                    <p style="margin: 4px 0; font-size: 0.875rem;">Post-surgical, congenital defects</p>
+                                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="viewCriteria('reconstruction')">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Trail Page -->
+                <div id="audit-page" class="page" style="display: none;">
+                    <div class="page-header">
+                        <h2 class="page-title">Audit Trail</h2>
+                        <p class="page-subtitle">Complete audit log for governance and quality improvement</p>
+                    </div>
+
+                    <!-- Audit Filters -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>🔍</span>
+                                Audit Filters
+                            </h3>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>User</label>
+                                <select id="audit-user-filter">
+                                    <option value="">All Users</option>
+                                    <option value="dr-chen">Dr. Sarah Chen</option>
+                                    <option value="dr-wilson">Dr. James Wilson</option>
+                                    <option value="system">System</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Action Type</label>
+                                <select id="audit-action-filter">
+                                    <option value="">All Actions</option>
+                                    <option value="assessment">Assessment Created</option>
+                                    <option value="referral">Referral Submitted</option>
+                                    <option value="update">Record Updated</option>
+                                    <option value="access">Data Accessed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <select id="audit-date-filter">
+                                    <option value="today">Today</option>
+                                    <option value="week">Last Week</option>
+                                    <option value="month">Last Month</option>
+                                    <option value="quarter">Last Quarter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="opacity: 0;">Filter</label>
+                                <button class="btn btn-primary" onclick="filterAuditLog()">
+                                    🔍 Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Log -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <span>📋</span>
+                                Audit Log Entries
+                            </h3>
+                            <button class="btn btn-secondary" onclick="exportAuditLog()">
+                                📥 Export Log
+                            </button>
+                        </div>
+                        <div id="audit-log-entries">
+                            <div class="audit-item">
+                                <div class="audit-icon" style="background: var(--color-success);">✅</div>
+                                <div class="audit-content">
+                                    <div class="audit-action">Assessment completed for patient NHS 123456789</div>
+                                    <div class="audit-meta">Dr. Sarah Chen • 2 hours ago • IP: 192.168.1.100 • Priority: URGENT</div>
+                                </div>
+                            </div>
+                            <div class="audit-item">
+                                <div class="audit-icon" style="background: var(--color-primary);">📤</div>
+                                <div class="audit-content">
+                                    <div class="audit-action">Referral submitted to Plastic Surgery</div>
+                                    <div class="audit-meta">Dr. Sarah Chen • 3 hours ago • Ref: PLT-2025-0847</div>
+                                </div>
+                            </div>
+                            <div class="audit-item">
+                                <div class="audit-icon" style="background: var(--color-warning);">🔄</div>
+                                <div class="audit-content">
+                                    <div class="audit-action">Patient record updated with NHS Spine data</div>
+                                    <div class="audit-meta">System • 4 hours ago • Data source: PDS API</div>
+                                </div>
+                            </div>
+                            <div class="audit-item">
+                                <div class="audit-icon" style="background: var(--color-primary);">👁️</div>
+                                <div class="audit-content">
+                                    <div class="audit-action">Patient data accessed for assessment</div>
+                                    <div class="audit-meta">Dr. James Wilson • 1 day ago • NHS: 123456789</div>
+                                </div>
+                            </div>
+                            <div class="audit-item">
+                                <div class="audit-icon" style="background: var(--color-success);">💬</div>
+                                <div class="audit-content">
+                                    <div class="audit-action">Secure message sent to Plastic Surgery team</div>
+                                    <div class="audit-meta">Dr. Sarah Chen • 1 day ago • Message ID: MSG-789</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="tutorial-overlay" style="display: none;">
+        <div class="tutorial-popup">
+            <button class="tutorial-close" onclick="closeTutorial()">×</button>
+            <h3 id="tutorial-title">Welcome to NHS Triage System</h3>
+            <div id="tutorial-content">
+                <p>This interactive tutorial will guide you through the key features of the enhanced NHS Plastic Surgery Triage System.</p>
+                <h4>New Features in v2.1:</h4>
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    <li>🔗 <strong>NHS Spine Integration</strong> - Automatic patient data lookup</li>
+                    <li>🤖 <strong>AI Image Analysis</strong> - Advanced lesion assessment</li>
+                    <li>📋 <strong>Referral Tracking</strong> - Complete workflow management</li>
+                    <li>💬 <strong>Secure Messaging</strong> - Team collaboration tools</li>
+                    <li>📤 <strong>Bulk Upload</strong> - Process multiple referrals</li>
+                    <li>👤 <strong>Patient Portal</strong> - Automated communications</li>
+                    <li>📊 <strong>Analytics</strong> - Performance insights</li>
+                    <li>📚 <strong>Clinical Guidelines</strong> - Embedded NHS guidance</li>
+                </ul>
+            </div>
+            <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeTutorial()">Skip Tutorial</button>
+                <button class="btn btn-primary" onclick="startGuidedTour()">Start Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen reader announcements -->
+    <div id="announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+    <script>
+        // Global state
+        let currentPage = 'assessment';
+        let currentLanguage = 'en';
+        let currentTheme = 'default';
+        let fontSize = 16;
+        let sidebarCollapsed = false;
+        let patientData = null;
+        let assessmentData = null;
+        let referrals = [];
+        let conversations = [];
+        let uploadedFiles = [];
+
+        // Sample data
+        const sampleReferrals = [
+            {
+                id: 'REF-001',
+                patient: 'John Smith',
+                nhsNumber: '123 456 7890',
+                status: 'urgent',
+                priority: 'urgent',
+                date: '2025-07-20',
+                condition: 'Suspicious pigmented lesion with recent changes',
+                aiConfidence: 89
+            },
+            {
+                id: 'REF-002',
+                patient: 'Mary Johnson',
+                nhsNumber: '098 765 4321',
+                status: 'submitted',
+                priority: 'routine',
+                date: '2025-07-19',
+                condition: 'Lipoma removal request',
+                aiConfidence: 95
+            },
+            {
+                id: 'REF-003',
+                patient: 'David Brown',
+                nhsNumber: '555 123 4567',
+                status: 'reviewed',
+                priority: 'routine',
+                date: '2025-07-18',
+                condition: 'Scar revision consultation',
+                aiConfidence: 78
+            }
+        ];
+
+        const samplePatients = {
+            '123 456 7890': {
+                name: 'John Smith',
+                dob: '15/03/1975',
+                gp: 'Hillside Medical Centre',
+                address: '123 Main Street, London, SW1A 1AA',
+                allergies: 'Penicillin, Latex',
+                medications: 'Lisinopril 10mg OD, Atorvastatin 20mg ON',
+                history: 'Hypertension, Hyperlipidemia, Previous skin cancer (BCC 2019)'
+            },
+            '098 765 4321': {
+                name: 'Mary Johnson',
+                dob: '22/08/1989',
+                gp: 'Central Health Practice',
+                address: '456 Oak Avenue, Manchester, M1 2AB',
+                allergies: 'None known',
+                medications: 'Oral contraceptive pill',
+                history: 'No significant past medical history'
+            },
+            '555 123 4567': {
+                name: 'David Brown',
+                dob: '10/12/1960',
+                gp: 'Riverside Surgery',
+                address: '789 Church Lane, Birmingham, B1 3CD',
+                allergies: 'Aspirin',
+                medications: 'Metformin 500mg BD, Ramipril 5mg OD',
+                history: 'Type 2 Diabetes, Previous road traffic accident (2020)'
+            }
+        };
+
+        // Navigation functions
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+                targetPage.style.display = 'block';
+            }
+            
+            // Add active class to clicked nav link
+            event.target.closest('.nav-link').classList.add('active');
+            
+            currentPage = pageId;
+            
+            // Initialize page-specific content
+            initializePage(pageId);
+            
+            // Announce page change for screen readers
+            announceToScreenReader(`Navigated to ${pageId} page`);
+        }
+
+        function initializePage(pageId) {
+            switch(pageId) {
+                case 'referrals':
+                    loadReferrals();
+                    break;
+                case 'messaging':
+                    loadConversations();
+                    break;
+                case 'analytics':
+                    updateAnalytics();
+                    break;
+                case 'guidelines':
+                    loadGuidelines();
+                    break;
+                case 'audit':
+                    loadAuditLog();
+                    break;
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('open');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                sidebarCollapsed = !sidebarCollapsed;
+            }
+        }
+
+        // NHS Spine Integration
+        function formatNHSNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 3 && value.length <= 6) {
+                value = value.substring(0, 3) + ' ' + value.substring(3);
+            } else if (value.length > 6) {
+                value = value.substring(0, 3) + ' ' + value.substring(3, 6) + ' ' + value.substring(6, 10);
+            }
+            input.value = value;
+        }
+
+        function lookupPatient() {
+            const nhsNumber = document.getElementById('nhs-number').value;
+            const cleanNhsNumber = nhsNumber.replace(/\s/g, '');
+            
+            if (cleanNhsNumber.length !== 10) {
+                showNotification('Please enter a valid 10-digit NHS number', 'error');
+                return;
+            }
+            
+            // Simulate NHS Spine lookup
+            showNotification('Looking up patient via NHS Spine...', 'info');
+            
+            setTimeout(() => {
+                const patient = samplePatients[nhsNumber];
+                if (patient) {
+                    populatePatientInfo(patient);
+                    showNotification('Patient found and verified via NHS Spine', 'success');
+                } else {
+                    showNotification('Patient not found in NHS Spine database', 'error');
+                }
+            }, 1500);
+        }
+
+        function populatePatientInfo(patient) {
+            document.getElementById('patient-name').value = patient.name;
+            document.getElementById('patient-dob').value = patient.dob;
+            document.getElementById('patient-gp').value = patient.gp;
+            document.getElementById('patient-address').value = patient.address;
+            document.getElementById('patient-allergies').textContent = patient.allergies;
+            document.getElementById('patient-medications').textContent = patient.medications;
+            document.getElementById('patient-history').textContent = patient.history;
+            
+            document.getElementById('patient-info').style.display = 'block';
+            patientData = patient;
+        }
+
+        // Image handling
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function dragEnter(ev) {
+            ev.preventDefault();
+            ev.target.closest('.image-analysis, .upload-zone').classList.add('drag-over');
+        }
+
+        function dragLeave(ev) {
+            ev.preventDefault();
+            if (!ev.target.closest('.image-analysis, .upload-zone').contains(ev.relatedTarget)) {
+                ev.target.closest('.image-analysis, .upload-zone').classList.remove('drag-over');
+            }
+        }
+
+        function handleImageDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            const files = ev.dataTransfer.files;
+            if (files.length > 0) {
+                processImageFile(files[0]);
+            }
+        }
+
+        function handleImageUpload(ev) {
+            const files = ev.target.files;
+            if (files.length > 0) {
+                processImageFile(files[0]);
+            }
+        }
+
+        function processImageFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showNotification('Please upload a valid image file', 'error');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('Image file too large. Maximum size is 10MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                displayImagePreview(e.target.result);
+                performImageAnalysis(file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayImagePreview(imageSrc) {
+            const dropZone = document.getElementById('image-drop-zone');
+            const existingPreview = dropZone.querySelector('.image-preview');
+            
+            if (existingPreview) {
+                existingPreview.remove();
+            }
+            
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.className = 'image-preview';
+            img.alt = 'Uploaded lesion image';
+            dropZone.appendChild(img);
+        }
+
+        function performImageAnalysis(file) {
+            showNotification('Analyzing image with AI...', 'info');
+            
+            // Simulate AI image analysis
+            setTimeout(() => {
+                const analysis = {
+                    riskLevel: Math.random() > 0.5 ? 'High' : 'Moderate',
+                    confidence: Math.floor(Math.random() * 30) + 70,
+                    features: [
+                        'Asymmetrical borders detected',
+                        'Color variation present',
+                        'Diameter >6mm',
+                        'Irregular texture pattern'
+                    ],
+                    recommendation: 'Urgent referral recommended based on ABCDE criteria'
+                };
+                
+                displayImageAnalysisResults(analysis);
+                showNotification('AI image analysis completed', 'success');
+            }, 3000);
+        }
+
+        function displayImageAnalysisResults(analysis) {
+            const resultDiv = document.getElementById('image-analysis-result');
+            const findingsDiv = document.getElementById('ai-image-findings');
+            
+            findingsDiv.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <strong>Risk Level:</strong> <span style="color: ${analysis.riskLevel === 'High' ? 'var(--color-urgent)' : 'var(--color-warning)'};">${analysis.riskLevel}</span>
+                    </div>
+                    <div>
+                        <strong>AI Confidence:</strong> ${analysis.confidence}%
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Detected Features:</strong>
+                    <ul style="margin-left: 20px;">
+                        ${analysis.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                </div>
+                <div style="background: #fef3c7; padding: 12px; border-radius: 4px;">
+                    <strong>Recommendation:</strong> ${analysis.recommendation}
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+
+        // Assessment functions
+        function performAssessment(event) {
+            event.preventDefault();
+            
+            const description = document.getElementById('clinical-description').value;
+            const urgencyIndicators = Array.from(document.getElementById('urgency-indicators').selectedOptions).map(option => option.value);
+            const aiModel = document.getElementById('ai-model').value;
+            
+            if (!description.trim()) {
+                showNotification('Please provide a clinical description', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const assessBtn = document.getElementById('assess-btn');
+            assessBtn.disabled = true;
+            assessBtn.innerHTML = '<span class="spinner"></span> Analyzing...';
+            
+            showNotification('Performing AI assessment...', 'info');
+            
+            // Simulate AI processing
+            setTimeout(() => {
+                const assessment = generateAIAssessment(description, urgencyIndicators);
+                displayAssessmentResults(assessment);
+                
+                assessBtn.disabled = false;
+                assessBtn.innerHTML = '<span>🧠</span> Perform AI Assessment';
+                
+                showNotification('AI assessment completed', 'success');
+            }, 4000);
+        }
+
+        function generateAIAssessment(description, urgencyIndicators) {
+            // Simulate AI assessment logic
+            const hasUrgentIndicators = urgencyIndicators.some(indicator => 
+                ['bleeding', 'rapid-growth', 'ulceration'].includes(indicator)
+            );
+            
+            const isComplexCase = description.toLowerCase().includes('melanoma') || 
+                                description.toLowerCase().includes('suspicious') ||
+                                description.toLowerCase().includes('irregular');
+            
+            let priority, timeframe, confidence, reasoning;
+            
+            if (hasUrgentIndicators || isComplexCase) {
+                priority = 'URGENT';
+                timeframe = 'Refer within 2 weeks (Cancer pathway)';
+                confidence = Math.floor(Math.random() * 15) + 85;
+                reasoning = 'Based on clinical description and selected urgency indicators, this case meets criteria for urgent referral. Key factors include: suspected malignancy features, rapid changes, and high-risk presentation pattern.';
+            } else if (urgencyIndicators.length > 0) {
+                priority = 'ROUTINE';
+                timeframe = 'Refer within 6 weeks';
+                confidence = Math.floor(Math.random() * 20) + 75;
+                reasoning = 'Clinical presentation suggests routine referral is appropriate. While some concerning features are present, they do not meet urgent criteria. Regular monitoring and timely specialist review recommended.';
+            } else {
+                priority = 'NON-PRIORITY';
+                timeframe = 'Refer within 18 weeks or consider alternatives';
+                confidence = Math.floor(Math.random() * 25) + 70;
+                reasoning = 'Based on the clinical description, this appears to be a benign presentation that may benefit from specialist assessment but does not require urgent intervention. Consider conservative management options.';
+            }
+            
+            return {
+                priority,
+                timeframe,
+                confidence,
+                reasoning,
+                recommendations: generateRecommendations(priority)
+            };
+        }
+
+        function generateRecommendations(priority) {
+            const recommendations = {
+                'URGENT': [
+                    'Complete 2-week wait referral immediately',
+                    'Arrange photography if not already done',
+                    'Patient safety netting advice provided',
+                    'Consider dermatoscopy if available',
+                    'Review any previous similar lesions'
+                ],
+                'ROUTINE': [
+                    'Complete standard referral form',
+                    'Document lesion characteristics thoroughly',
+                    'Provide patient information leaflet',
+                    'Review in 2-4 weeks if changes occur',
+                    'Consider teledermatology if available'
+                ],
+                'NON-PRIORITY': [
+                    'Conservative management options discussed',
+                    'Patient education on self-monitoring',
+                    'Routine follow-up arranged',
+                    'Referral if patient concerns persist',
+                    'Consider GP special interest clinic'
+                ]
+            };
+            
+            return recommendations[priority] || [];
+        }
+
+        function displayAssessmentResults(assessment) {
+            const resultsDiv = document.getElementById('assessment-results');
+            const priorityDiv = document.getElementById('priority-result');
+            const priorityIcon = document.getElementById('priority-icon');
+            const priorityText = document.getElementById('priority-text');
+            const priorityTimeframe = document.getElementById('priority-timeframe');
+            const confidencePercentage = document.getElementById('confidence-percentage');
+            const aiReasoning = document.getElementById('ai-reasoning');
+            const clinicalRecommendations = document.getElementById('clinical-recommendations');
+            
+            // Set priority styling and content
+            let bgColor, icon;
+            switch(assessment.priority) {
+                case 'URGENT':
+                    bgColor = 'var(--color-urgent)';
+                    icon = '🚨';
+                    break;
+                case 'ROUTINE':
+                    bgColor = 'var(--color-warning)';
+                    icon = '⏰';
+                    break;
+                case 'NON-PRIORITY':
+                    bgColor = 'var(--color-success)';
+                    icon = '📅';
+                    break;
+            }
+            
+            priorityDiv.style.backgroundColor = bgColor;
+            priorityIcon.textContent = icon;
+            priorityText.textContent = assessment.priority + ' REFERRAL';
+            priorityTimeframe.textContent = assessment.timeframe;
+            confidencePercentage.textContent = assessment.confidence + '%';
+            
+            aiReasoning.textContent = assessment.reasoning;
+            
+            clinicalRecommendations.innerHTML = `
+                <ul style="margin-left: 20px; line-height: 1.8;">
+                    ${assessment.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            `;
+            
+            resultsDiv.style.display = 'block';
+            assessmentData = assessment;
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Draft management
+        function saveDraft() {
+            const formData = {
+                clinicalDescription: document.getElementById('clinical-description').value,
+                urgencyIndicators: Array.from(document.getElementById('urgency-indicators').selectedOptions).map(option => option.value),
+                aiModel: document.getElementById('ai-model').value,
+                patientData: patientData,
+                timestamp: new Date().toISOString()
+            };
+            
+            // In a real app, this would save to backend/local storage
+            sessionStorage.setItem('nhsTriage_draft', JSON.stringify(formData));
+            showNotification('Draft saved successfully', 'success');
+        }
+
+        function loadDraft() {
+            const savedDraft = sessionStorage.getItem('nhsTriage_draft');
+            if (!savedDraft) {
+                showNotification('No saved draft found', 'warning');
+                return;
+            }
+            
+            try {
+                const formData = JSON.parse(savedDraft);
+                
+                document.getElementById('clinical-description').value = formData.clinicalDescription || '';
+                document.getElementById('ai-model').value = formData.aiModel || 'gpt-4o';
+                
+                // Restore selected urgency indicators
+                const select = document.getElementById('urgency-indicators');
+                Array.from(select.options).forEach(option => {
+                    option.selected = formData.urgencyIndicators.includes(option.value);
+                });
+                
+                if (formData.patientData) {
+                    populatePatientInfo(formData.patientData);
+                }
+                
+                showNotification('Draft loaded successfully', 'success');
+            } catch (error) {
+                showNotification('Error loading draft', 'error');
+            }
+        }
+
+        // Referral functions
+        function createReferral() {
+            if (!assessmentData) {
+                showNotification('Please complete assessment first', 'warning');
+                return;
+            }
+            
+            const referral = {
+                id: 'REF-' + String(Date.now()).slice(-6),
+                patient: patientData?.name || 'Unknown Patient',
+                nhsNumber: document.getElementById('nhs-number').value,
+                status: 'submitted',
+                priority: assessmentData.priority.toLowerCase(),
+                date: new Date().toISOString().split('T')[0],
+                condition: document.getElementById('clinical-description').value.substring(0, 100) + '...',
+                aiConfidence: assessmentData.confidence
+            };
+            
+            // Add to referrals list
+            referrals.unshift(referral);
+            
+            showNotification('Referral created successfully: ' + referral.id, 'success');
+            
+            // Switch to referrals page
+            showPage('referrals');
+        }
+
+        function generateReferralLetter() {
+            if (!assessmentData || !patientData) {
+                showNotification('Please complete patient lookup and assessment first', 'warning');
+                return;
+            }
+            
+            const letter = generateReferralLetterContent();
+            downloadFile('referral-letter.txt', letter, 'text/plain');
+            showNotification('Referral letter generated and downloaded', 'success');
+        }
+
+        function generateReferralLetterContent() {
+            const today = new Date().toLocaleDateString('en-GB');
+            return `NHS PLASTIC SURGERY REFERRAL
+
+Date: ${today}
+Referring Clinician: Dr. Sarah Chen
+Practice: Example Medical Centre
+
+PATIENT DETAILS:
+Name: ${patientData.name}
+NHS Number: ${document.getElementById('nhs-number').value}
+Date of Birth: ${patientData.dob}
+Address: ${patientData.address}
+
+CLINICAL DETAILS:
+${document.getElementById('clinical-description').value}
+
+URGENCY: ${assessmentData.priority}
+Timeframe: ${assessmentData.timeframe}
+AI Confidence: ${assessmentData.confidence}%
+
+CLINICAL REASONING:
+${assessmentData.reasoning}
+
+RECOMMENDATIONS:
+${assessmentData.recommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
+
+MEDICAL HISTORY:
+Allergies: ${patientData.allergies}
+Current Medications: ${patientData.medications}
+Past Medical History: ${patientData.history}
+
+Please review this patient according to the ${assessmentData.priority.toLowerCase()} priority pathway.
+
+Kind regards,
+Dr. Sarah Chen
+`;
+        }
+
+        function sendToColleague() {
+            showNotification('Assessment shared with plastic surgery team', 'success');
+        }
+
+        function downloadReport() {
+            if (!assessmentData) {
+                showNotification('No assessment data to download', 'warning');
+                return;
+            }
+            
+            const report = JSON.stringify({
+                assessment: assessmentData,
+                patient: patientData,
+                clinicalDescription: document.getElementById('clinical-description').value,
+                timestamp: new Date().toISOString()
+            }, null, 2);
+            
+            downloadFile('assessment-report.json', report, 'application/json');
+            showNotification('Assessment report downloaded', 'success');
+        }
+
+        function downloadFile(filename, content, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Referral tracking
+        function loadReferrals() {
+            const referralsList = document.getElementById('referrals-list');
+            const allReferrals = [...sampleReferrals, ...referrals];
+            
+            referralsList.innerHTML = allReferrals.map(referral => `
+                <div class="referral-card" onclick="viewReferral('${referral.id}')">
+                    <div class="referral-status status-${referral.status}">${referral.status.toUpperCase()}</div>
+                    <h4 style="margin-bottom: 8px;">${referral.patient}</h4>
+                    <p style="color: var(--color-text-light); margin-bottom: 8px;">NHS: ${referral.nhsNumber}</p>
+                    <p style="margin-bottom: 12px;">${referral.condition}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: var(--color-text-light);">
+                        <span>Priority: ${referral.priority.toUpperCase()}</span>
+                        <span>AI Confidence: ${referral.aiConfidence}%</span>
+                        <span>${referral.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterReferrals() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const priorityFilter = document.getElementById('priority-filter').value;
+            const searchFilter = document.getElementById('search-referrals').value.toLowerCase();
+            
+            // In a real app, this would filter the displayed referrals
+            showNotification('Filters applied', 'info');
+        }
+
+        function viewReferral(id) {
+            showNotification(`Viewing referral details: ${id}`, 'info');
+        }
+
+        // Messaging functions
+        function loadConversations() {
+            // Conversations are already loaded in HTML
+        }
+
+        function selectConversation(convId) {
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+                const innerDiv = item.querySelector('div > div');
+                if (innerDiv) {
+                    innerDiv.style.background = 'transparent';
+                    innerDiv.style.color = 'var(--color-text)';
+                }
+            });
+            
+            const selectedItem = document.querySelector(`[onclick="selectConversation('${convId}')"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+                const innerDiv = selectedItem.querySelector('div > div');
+                if (innerDiv) {
+                    innerDiv.style.background = 'var(--color-primary)';
+                    innerDiv.style.color = 'white';
+                }
+            }
+        }
+
+        function startNewConversation() {
+            showNotification('New conversation started', 'success');
+        }
+
+        function handleMessageKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-text');
+            const messageText = messageInput.value.trim();
+            
+            if (!messageText) return;
+            
+            const messagesContainer = document.getElementById('messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message sent';
+            messageDiv.innerHTML = `
+                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 4px;">You • Just now</div>
+                <div>${messageText}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            messageInput.value = '';
+            showNotification('Message sent securely', 'success');
+        }
+
+        // Bulk upload functions
+        function handleBulkDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            const files = ev.dataTransfer.files;
+            if (files.length > 0) {
+                processBulkFile(files[0]);
+            }
+        }
+
+        function handleBulkUpload(ev) {
+            const files = ev.target.files;
+            if (files.length > 0) {
+                processBulkFile(files[0]);
+            }
+        }
+
+        function processBulkFile(file) {
+            if (!file.name.endsWith('.csv') && !file.name.endsWith('.xlsx')) {
+                showNotification('Please upload a CSV or Excel file', 'error');
+                return;
+            }
+            
+            showBulkProgress();
+            simulateBulkProcessing();
+        }
+
+        function showBulkProgress() {
+            document.getElementById('upload-progress-section').style.display = 'block';
+            
+            let progress = 0;
+            const progressBar = document.getElementById('upload-progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const progressPercentage = document.getElementById('progress-percentage');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                progressPercentage.textContent = Math.floor(progress) + '%';
+                
+                if (progress < 30) {
+                    progressText.textContent = 'Reading file...';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Validating NHS numbers...';
+                } else if (progress < 90) {
+                    progressText.textContent = 'Running AI assessments...';
+                } else {
+                    progressText.textContent = 'Finalizing results...';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    showBulkResults();
+                }
+            }, 200);
+        }
+
+        function simulateBulkProcessing() {
+            setTimeout(() => {
+                showNotification('Bulk processing completed', 'success');
+            }, 6000);
+        }
+
+        function showBulkResults() {
+            document.getElementById('bulk-results').style.display = 'block';
+            
+            // Simulate processing results
+            const processed = 45;
+            const errors = 3;
+            const urgent = 8;
+            const validation = 2;
+            
+            document.getElementById('processed-count').textContent = processed;
+            document.getElementById('error-count').textContent = errors;
+            document.getElementById('urgent-count').textContent = urgent;
+            document.getElementById('validation-count').textContent = validation;
+            
+            // Show sample errors
+            document.getElementById('error-list').innerHTML = `
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; padding: 12px; margin-bottom: 8px;">
+                    <strong>Row 12:</strong> Invalid NHS number format
+                </div>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; padding: 12px; margin-bottom: 8px;">
+                    <strong>Row 27:</strong> Missing required clinical description
+                </div>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; padding: 12px;">
+                    <strong>Row 34:</strong> Patient not found in NHS Spine
+                </div>
+            `;
+        }
+
+        function downloadTemplate() {
+            const csvContent = `NHS Number,Patient Name,Date of Birth,Clinical Description,Urgency Indicators,GP Practice Code
+123 456 7890,John Smith,15/03/1975,Suspicious pigmented lesion with irregular borders,rapid-growth;bleeding,P12345
+098 765 4321,Mary Johnson,22/08/1989,Lipoma requiring removal,none,P67890`;
+            
+            downloadFile('nhs-triage-template.csv', csvContent, 'text/csv');
+            showNotification('CSV template downloaded', 'success');
+        }
+
+        function viewSampleData() {
+            showNotification('Sample data preview opened', 'info');
+        }
+
+        function approveAllValid() {
+            showNotification('All valid referrals approved and submitted', 'success');
+        }
+
+        function downloadErrorReport() {
+            const errorReport = `NHS Triage Bulk Upload Error Report
+Generated: ${new Date().toLocaleString()}
+
+Row 12: Invalid NHS number format - Please check NHS number follows XXX XXX XXXX format
+Row 27: Missing required clinical description - Clinical description is mandatory
+Row 34: Patient not found in NHS Spine - Please verify patient details
+
+Total Errors: 3
+Successfully Processed: 45`;
+            
+            downloadFile('bulk-upload-errors.txt', errorReport, 'text/plain');
+            showNotification('Error report downloaded', 'success');
+        }
+
+        function reviewIndividually() {
+            showNotification('Opening individual review interface', 'info');
+        }
+
+        // Patient portal functions
+        function generatePatientStatus() {
+            const patientSelect = document.getElementById('patient-select');
+            const statusType = document.getElementById('status-type').value;
+            
+            if (!patientSelect.value) {
+                showNotification('Please select a patient', 'warning');
+                return;
+            }
+            
+            const statusContent = generateStatusContent(patientSelect.options[patientSelect.selectedIndex].text, statusType);
+            document.getElementById('patient-status-content').innerHTML = statusContent;
+            document.getElementById('patient-status-preview').style.display = 'block';
+            
+            showNotification('Patient status page generated', 'success');
+        }
+
+        function generateStatusContent(patientInfo, statusType) {
+            const patientName = patientInfo.split(' (')[0];
+            const statusMessages = {
+                'referral-received': {
+                    title: 'Referral Received',
+                    message: 'Your referral has been received and is being processed.',
+                    nextSteps: 'We will review your case and contact you within 5 working days.',
+                    icon: '📋'
+                },
+                'under-review': {
+                    title: 'Under Review',
+                    message: 'Your case is currently being reviewed by our plastic surgery team.',
+                    nextSteps: 'You will be contacted with next steps within 7 days.',
+                    icon: '👀'
+                },
+                'appointment-scheduled': {
+                    title: 'Appointment Scheduled',
+                    message: 'Your appointment has been scheduled.',
+                    nextSteps: 'Please check your email for appointment details and preparation instructions.',
+                    icon: '📅'
+                },
+                'additional-info-needed': {
+                    title: 'Additional Information Required',
+                    message: 'We need some additional information to process your referral.',
+                    nextSteps: 'Please contact your GP to provide the requested information.',
+                    icon: '❓'
+                }
+            };
+            
+            const status = statusMessages[statusType];
+            
+            return `
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">${status.icon}</div>
+                    <h2 style="color: var(--color-primary); margin-bottom: 8px;">${status.title}</h2>
+                    <p style="color: var(--color-text-light);">NHS Plastic Surgery Service</p>
+                </div>
+                
+                <div style="background: white; border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h3>Dear ${patientName},</h3>
+                    <p style="margin: 16px 0;">${status.message}</p>
+                    <p style="margin: 16px 0;"><strong>Next Steps:</strong> ${status.nextSteps}</p>
+                    <p style="margin: 16px 0;">If you have any questions, please contact us at 0800 123 4567.</p>
+                </div>
+                
+                <div style="font-size: 0.875rem; color: var(--color-text-light); text-align: center;">
+                    <p>Reference: REF-${Date.now().toString().slice(-6)}</p>
+                    <p>Last updated: ${new Date().toLocaleDateString()}</p>
+                </div>
+            `;
+        }
+
+        function previewEmail() {
+            showNotification('Email preview opened', 'info');
+        }
+
+        function sendPatientUpdate() {
+            showNotification('Patient update sent successfully', 'success');
+        }
+
+        function copyStatusLink() {
+            navigator.clipboard.writeText('https://nhs.uk/plastic-surgery/status/REF-123456').then(() => {
+                showNotification('Status link copied to clipboard', 'success');
+            });
+        }
+
+        function updateInstructions() {
+            const instructionType = document.getElementById('instruction-type').value;
+            const priorityLevel = document.getElementById('priority-level').value;
+            
+            const instructions = generateInstructions(instructionType, priorityLevel);
+            document.getElementById('instruction-content').innerHTML = instructions;
+        }
+
+        function generateInstructions(type, priority) {
+            const instructionTemplates = {
+                'pre-appointment': {
+                    urgent: 'Please attend your urgent appointment. Bring a list of current medications and photo ID. Fasting not required.',
+                    routine: 'Prepare for your appointment by listing any questions or concerns. Bring current medications list.',
+                    'non-priority': 'Review your symptoms before appointment. Note any changes since referral.'
+                },
+                'post-assessment': {
+                    urgent: 'Follow urgent post-assessment care plan. Contact us immediately if symptoms worsen.',
+                    routine: 'Follow the care plan provided. Return if symptoms change significantly.',
+                    'non-priority': 'Continue routine care as discussed. Schedule follow-up as recommended.'
+                },
+                'wound-care': {
+                    urgent: 'Keep wound clean and dry. Change dressing daily. Seek immediate help if signs of infection.',
+                    routine: 'Clean wound twice daily with saline. Apply prescribed dressing. Monitor for healing.',
+                    'non-priority': 'Basic wound care: keep clean, dry, and covered. Monitor for any changes.'
+                }
+            };
+            
+            return instructionTemplates[type]?.[priority] || 'Instructions will be provided based on your specific case.';
+        }
+
+        function customizeInstructions() {
+            showNotification('Instruction customization opened', 'info');
+        }
+
+        function previewInstructions() {
+            showNotification('Instruction preview opened', 'info');
+        }
+
+        function sendInstructions() {
+            showNotification('Instructions sent to patient', 'success');
+        }
+
+        // Analytics functions
+        function updateAnalytics() {
+            // Analytics data is already displayed in HTML
+            // In a real app, this would fetch live data
+        }
+
+        // Guidelines functions
+        function loadGuidelines() {
+            // Guidelines are already loaded in HTML
+        }
+
+        function searchGuidelines() {
+            const searchTerm = document.getElementById('guideline-search').value.toLowerCase();
+            // In a real app, this would filter guidelines based on search
+            showNotification(`Searching for guidelines: ${searchTerm}`, 'info');
+        }
+
+        function filterGuidelines() {
+            const category = document.getElementById('guideline-category').value;
+            // In a real app, this would filter by category
+            showNotification(`Filtering by category: ${category}`, 'info');
+        }
+
+        function viewFullGuideline(id) {
+            showNotification(`Opening full guideline: ${id}`, 'info');
+        }
+
+        function addToFavorites(id) {
+            showNotification(`Added guideline to favorites: ${id}`, 'success');
+        }
+
+        function viewCriteria(type) {
+            showNotification(`Viewing detailed criteria for: ${type}`, 'info');
+        }
+
+        function showGuidelines() {
+            showPage('guidelines');
+        }
+
+        // Audit functions
+        function loadAuditLog() {
+            // Audit log is already populated in HTML
+        }
+
+        function filterAuditLog() {
+            showNotification('Audit log filters applied', 'info');
+        }
+
+        function exportAuditLog() {
+            const auditData = `NHS Triage System Audit Log
+Exported: ${new Date().toLocaleString()}
+
+Assessment completed for patient NHS 123456789 | Dr. Sarah Chen | 2 hours ago
+Referral submitted to Plastic Surgery | Dr. Sarah Chen | 3 hours ago
+Patient record updated with NHS Spine data | System | 4 hours ago
+Patient data accessed for assessment | Dr. James Wilson | 1 day ago
+Secure message sent to Plastic Surgery team | Dr. Sarah Chen | 1 day ago`;
+            
+            downloadFile('audit-log.txt', auditData, 'text/plain');
+            showNotification('Audit log exported', 'success');
+        }
+
+        // Accessibility functions
+        function toggleHighContrast() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'high-contrast') {
+                body.removeAttribute('data-theme');
+                showNotification('High contrast mode disabled', 'info');
+            } else {
+                body.setAttribute('data-theme', 'high-contrast');
+                showNotification('High contrast mode enabled', 'info');
+            }
+        }
+
+        function increaseFontSize() {
+            fontSize = Math.min(fontSize + 2, 24);
+            document.documentElement.style.setProperty('--font-size-base', fontSize + 'px');
+            showNotification(`Font size increased to ${fontSize}px`, 'info');
+        }
+
+        function decreaseFontSize() {
+            fontSize = Math.max(fontSize - 2, 12);
+            document.documentElement.style.setProperty('--font-size-base', fontSize + 'px');
+            showNotification(`Font size decreased to ${fontSize}px`, 'info');
+        }
+
+        function toggleReducedMotion() {
+            const body = document.body;
+            if (body.style.getPropertyValue('--transition') === 'none') {
+                body.style.removeProperty('--transition');
+                showNotification('Animations enabled', 'info');
+            } else {
+                body.style.setProperty('--transition', 'none');
+                showNotification('Animations disabled', 'info');
+            }
+        }
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            // In a real app, this would change the interface language
+            showNotification(`Language changed to: ${lang}`, 'info');
+        }
+
+        function announceToScreenReader(message) {
+            const announcements = document.getElementById('announcements');
+            announcements.textContent = message;
+        }
+
+        // Tutorial functions
+        function startTutorial() {
+            document.getElementById('tutorial-overlay').style.display = 'flex';
+        }
+
+        function closeTutorial() {
+            document.getElementById('tutorial-overlay').style.display = 'none';
+        }
+
+        function startGuidedTour() {
+            closeTutorial();
+            showNotification('Starting guided tour...', 'info');
+            
+            // Simulate guided tour
+            setTimeout(() => {
+                showNotification('Tour: This is the NHS Spine integration panel', 'info');
+            }, 1000);
+            
+            setTimeout(() => {
+                showNotification('Tour: Use this form for clinical assessments', 'info');
+            }, 3000);
+            
+            setTimeout(() => {
+                showNotification('Tour completed! Explore the features.', 'success');
+            }, 5000);
+        }
+
+        // Utility functions
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 4000);
+            
+            // Also announce to screen readers
+            announceToScreenReader(message);
+        }
+
+        function generateSummary() {
+            if (!patientData) {
+                showNotification('Please complete patient lookup first', 'warning');
+                return;
+            }
+            
+            const description = document.getElementById('clinical-description').value;
+            if (!description.trim()) {
+                showNotification('Please provide clinical description', 'warning');
+                return;
+            }
+            
+            const summary = `CLINICAL SUMMARY
+Patient: ${patientData.name}
+NHS Number: ${document.getElementById('nhs-number').value}
+Date: ${new Date().toLocaleDateString()}
+
+PRESENTATION:
+${description}
+
+MEDICAL HISTORY:
+${patientData.history}
+
+ALLERGIES: ${patientData.allergies}
+MEDICATIONS: ${patientData.medications}`;
+            
+            downloadFile('clinical-summary.txt', summary, 'text/plain');
+            showNotification('Clinical summary generated and downloaded', 'success');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize default page
+            initializePage('assessment');
+            
+            // Update instruction content on page load
+            updateInstructions();
+            
+            showNotification('NHS Plastic Surgery Triage System loaded successfully', 'success');
+        });
+
+        // Handle responsive navigation
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                if (sidebarCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('expanded');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

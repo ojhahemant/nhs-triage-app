@@ -1,0 +1,334 @@
+/* =======================================
+   HEALTHCARE SMART TRIAGE - GLOBAL STYLES
+   ======================================= */
+
+/* CSS Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* ===========================
+     HEALTHCARE BRAND COLORS
+     =========================== */
+  --healthcare-blue: #003087;
+  --healthcare-blue-dark: #002060;
+  --healthcare-blue-light: #1e4a72;
+  
+  /* Legacy aliases for compatibility */
+  --nhs-blue: var(--healthcare-blue);
+  --nhs-blue-dark: var(--healthcare-blue-dark);
+  --nhs-blue-light: var(--healthcare-blue-light);
+  
+  /* ===========================
+     PRIORITY SYSTEM COLORS
+     =========================== */
+  /* Urgent Priority */
+  --urgent-bg: #f8d7da;
+  --urgent-border: #dc3545;
+  --urgent-text: #721c24;
+  
+  /* Routine Priority */
+  --routine-bg: #d4edda;
+  --routine-border: #28a745;
+  --routine-text: #155724;
+  
+  /* MDT Review Priority */
+  --mdt-bg: #fff3cd;
+  --mdt-border: #fd7e14;
+  --mdt-text: #856404;
+  
+  /* Non-Priority */
+  --non-priority-bg: #e2e3f1;
+  --non-priority-border: #6f42c1;
+  --non-priority-text: #383d75;
+  
+  /* ===========================
+     NEUTRAL COLOR PALETTE
+     =========================== */
+  --gray-50: #f8f9fa;
+  --gray-100: #e9ecef;
+  --gray-200: #dee2e6;
+  --gray-300: #ced4da;
+  --gray-400: #adb5bd;
+  --gray-500: #6c757d;
+  --gray-600: #495057;
+  --gray-700: #343a40;
+  --gray-800: #212529;
+  --gray-900: #000000;
+  
+  /* Text Color Aliases */
+  --healthcare-text-primary: var(--gray-900);
+  --healthcare-text-secondary: var(--gray-600);
+  --healthcare-border-color: var(--gray-200);
+  
+  /* Legacy aliases for compatibility */
+  --nhs-text-primary: var(--healthcare-text-primary);
+  --nhs-text-secondary: var(--healthcare-text-secondary);
+  --nhs-border-color: var(--healthcare-border-color);
+  
+  /* ===========================
+     SEMANTIC COLORS
+     =========================== */
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  
+  /* ===========================
+     SPACING SYSTEM
+     =========================== */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+  
+  /* ===========================
+     TYPOGRAPHY SYSTEM
+     =========================== */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-mono: 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-base: 1rem;    /* 16px */
+  --font-size-lg: 1.125rem;  /* 18px */
+  --font-size-xl: 1.25rem;   /* 20px */
+  --font-size-2xl: 1.5rem;   /* 24px */
+  --font-size-3xl: 2rem;     /* 32px */
+  --font-size-4xl: 2.5rem;   /* 40px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ===========================
+     BORDER RADIUS
+     =========================== */
+  --radius-sm: 4px;
+  --radius-base: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Border radius aliases */
+  --border-radius: var(--radius-base);
+  --border-radius-lg: var(--radius-lg);
+  
+  /* ===========================
+     SHADOWS
+     =========================== */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* ===========================
+     TRANSITIONS
+     =========================== */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-all: all var(--transition-base);
+  
+  /* ===========================
+     Z-INDEX SCALE
+     =========================== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* ===========================
+     COMPONENT SPECIFIC VARIABLES
+     =========================== */
+  /* Header */
+  --header-height: 80px;
+  --header-bg: linear-gradient(135deg, var(--healthcare-blue), var(--healthcare-blue-light));
+  
+  /* Sidebar */
+  --sidebar-width: 300px;
+  --sidebar-width-collapsed: 80px;
+  --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+  
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-border: var(--gray-200);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-base);
+  
+  /* Forms */
+  --input-border: var(--gray-300);
+  --input-border-focus: var(--healthcare-blue);
+  --input-bg: #ffffff;
+  --input-text: var(--gray-700);
+  --input-placeholder: var(--gray-400);
+  
+  /* Buttons */
+  --btn-padding: 0.75rem var(--spacing-lg);
+  --btn-radius: var(--radius-base);
+  --btn-font-weight: var(--font-weight-medium);
+  
+  /* Healthcare Specific */
+  --healthcare-focus-color: var(--healthcare-blue);
+  --healthcare-focus-shadow: 0 0 0 3px rgba(0, 48, 135, 0.1);
+  
+  /* Legacy aliases */
+  --nhs-focus-color: var(--healthcare-focus-color);
+  --nhs-focus-shadow: var(--healthcare-focus-shadow);
+}
+
+/* ===========================
+   BASE HTML ELEMENTS
+   =========================== */
+
+html {
+  line-height: var(--line-height-normal);
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: var(--font-family);
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+  font-family: var(--font-family);
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ===========================
+   TYPOGRAPHY
+   =========================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  color: var(--gray-800);
+  line-height: var(--line-height-tight);
+}
+
+h1 { font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); }
+h2 { font-size: var(--font-size-3xl); font-weight: var(--font-weight-semibold); }
+h3 { font-size: var(--font-size-2xl); font-weight: var(--font-weight-semibold); }
+h4 { font-size: var(--font-size-xl); font-weight: var(--font-weight-medium); }
+h5 { font-size: var(--font-size-lg); font-weight: var(--font-weight-medium); }
+h6 { font-size: var(--font-size-base); font-weight: var(--font-weight-medium); }
+
+p {
+  margin: 0;
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: var(--nhs-blue);
+  text-decoration: none;
+  transition: var(--transition-all);
+}
+
+a:hover {
+  color: var(--nhs-blue-dark);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--nhs-focus-color);
+  outline-offset: 2px;
+}
+
+/* ===========================
+   FOCUS MANAGEMENT
+   =========================== */
+
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--nhs-focus-color);
+  outline-offset: 2px;
+}
+
+/* ===========================
+   ACCESSIBILITY
+   =========================== */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===========================
+   PRINT STYLES
+   =========================== */
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+}

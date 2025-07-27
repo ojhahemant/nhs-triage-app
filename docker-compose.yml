@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nhs-triage-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      # OpenAI Configuration
+      - REACT_APP_OPENAI_API_KEY=${REACT_APP_OPENAI_API_KEY}
+      - REACT_APP_OPENAI_MODEL=${REACT_APP_OPENAI_MODEL:-gpt-4o}
+      - REACT_APP_OPENAI_TEMPERATURE=${REACT_APP_OPENAI_TEMPERATURE:-0.7}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - nhs-network
+
+networks:
+  nhs-network:
+    driver: bridge
+
+# For production with external database or services
+# volumes:
+#   nhs-data:
+#     driver: local

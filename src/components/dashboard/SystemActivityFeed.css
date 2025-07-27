@@ -1,0 +1,126 @@
+/* SystemActivityFeed CSS */
+.system-activity-feed {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.activity-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.activity-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.activity-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.activity-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.activity-icon {
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.activity-icon.assessment {
+  color: #059669;
+}
+
+.activity-icon.referral {
+  color: #0284c7;
+}
+
+.activity-icon.system {
+  color: #7c3aed;
+}
+
+.activity-icon.access {
+  color: #dc2626;
+}
+
+.activity-icon.letter {
+  color: #f59e0b;
+}
+
+.activity-icon.letter-sent {
+  color: #059669;
+}
+
+.activity-icon.default {
+  color: #6b7280;
+}
+
+.activity-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.activity-description {
+  font-size: 0.875rem;
+  color: #111827;
+  font-weight: 500;
+}
+
+.patient-id {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.activity-meta {
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 2rem;
+}
+
+.activity-user {
+  font-weight: 500;
+  color: var(--nhs-blue);
+}
+
+.activity-separator {
+  color: #d1d5db;
+}

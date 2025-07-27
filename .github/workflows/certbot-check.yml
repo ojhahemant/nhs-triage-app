@@ -1,0 +1,29 @@
+name: Check Certbot Status
+
+on:
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  check_cert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Certbot Certificate Status
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "--- Checking Certbot Certificates ---"
+            sudo certbot certificates
+
+            echo ""
+            echo "--- Testing Nginx Configuration (again) ---"
+            # This ensures Nginx is still happy after Certbot's work
+            sudo nginx -t
+
+            echo "--- Attempting Nginx Restart (just in case) ---"
+            # A full restart can sometimes clear lingering issues
+            sudo systemctl restart nginx
+
+            echo "--- Certbot Check Complete ---"

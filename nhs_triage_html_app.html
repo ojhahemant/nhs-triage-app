@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHS Smart Plastic Surgery Triage System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #003087, #1e4a72);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Navigation */
+        .nav {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background: #f8f9fa;
+            color: #003087;
+        }
+
+        .nav-tab.active {
+            border-bottom-color: #003087;
+            color: #003087;
+            background: #f8f9fa;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h2 {
+            font-size: 2rem;
+            color: #003087;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card.urgent { border-left-color: #dc3545; }
+        .stat-card.routine { border-left-color: #28a745; }
+        .stat-card.mdt { border-left-color: #fd7e14; }
+        .stat-card.total { border-left-color: #007bff; }
+
+        .stat-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-info p {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #003087;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #003087;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #003087;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #002060;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Triage Result */
+        .triage-result {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 3px solid;
+            text-align: center;
+        }
+
+        .triage-result.urgent {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .triage-result.routine {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .triage-result.mdt {
+            background: #fff3cd;
+            border-color: #fd7e14;
+            color: #856404;
+        }
+
+        .triage-result.non-priority {
+            background: #e2e3f1;
+            border-color: #6f42c1;
+            color: #383d75;
+        }
+
+        .result-section {
+            background: rgba(255,255,255,0.8);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .result-section h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .result-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-section li {
+            padding: 0.25rem 0;
+            border-left: 3px solid #007bff;
+            padding-left: 0.5rem;
+            margin: 0.25rem 0;
+        }
+
+        /* Table */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #003087;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Test case buttons */
+        .test-case-btn {
+            background: none;
+            border: 2px solid;
+            cursor: pointer;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: inherit;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+
+        .test-case-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Photo upload */
+        .photo-upload {
+            border: 2px dashed #003087;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+        }
+
+        .photo-upload:hover {
+            background: #f0f4ff;
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Define all functions FIRST, before HTML tries to use them
+        
+        // Application State
+        let appState = {
+            activeTab: 'dashboard',
+            referrals: [
+                { id: '001', patient: 'John Smith', priority: 'urgent', condition: 'Melanoma suspect', date: '2025-06-07', status: 'pending' },
+                { id: '002', patient: 'Jane Doe', priority: 'routine', condition: 'Benign mole', date: '2025-06-06', status: 'scheduled' },
+                { id: '003', patient: 'Bob Wilson', priority: 'mdt', condition: 'Aesthetic concern', date: '2025-06-05', status: 'mdt-review' }
+            ],
+            stats: {
+                urgent: 12,
+                routine: 87,
+                mdt: 23,
+                total: 122
+            }
+        };
+
+        // Test data sets
+        const testDataSets = {
+            'urgent-melanoma': {
+                name: "Urgent Melanoma Case",
+                data: {
+                    patientName: "John Smith",
+                    nhsNumber: "123 456 7890",
+                    patientAge: "67",
+                    referringGP: "Dr. Sarah Johnson",
+                    lesionType: "Dark pigmented lesion on back, irregular borders, recent changes in color and size. Suspicious for melanoma. Patient reports lesion has doubled in size over past 3 months.",
+                    lesionLocation: "Upper back, left scapular region",
+                    lesionSize: "15mm x 12mm",
+                    growthRate: "rapid",
+                    symptoms: ["Fast-growing", "Irregular borders", "Color changes", "Bleeding"],
+                    additionalNotes: "Patient is a retired builder with significant sun exposure history. Very anxious about changes in lesion appearance."
+                }
+            },
+            'routine-mole': {
+                name: "Routine Benign Mole",
+                data: {
+                    patientName: "Emma Wilson",
+                    nhsNumber: "987 654 3210",
+                    patientAge: "34",
+                    referringGP: "Dr. Michael Brown",
+                    lesionType: "Well-circumscribed brown mole on arm, stable appearance, patient concerned about cosmetic appearance",
+                    lesionLocation: "Left forearm",
+                    lesionSize: "8mm diameter",
+                    growthRate: "stable",
+                    symptoms: [],
+                    additionalNotes: "Patient requesting removal for cosmetic reasons. No concerning features on examination."
+                }
+            },
+            'mdt-aesthetic': {
+                name: "MDT Aesthetic Case",
+                data: {
+                    patientName: "Sarah Thompson",
+                    nhsNumber: "456 789 0123",
+                    patientAge: "28",
+                    referringGP: "Dr. Lisa Chen",
+                    lesionType: "Facial scar from childhood accident causing significant psychological distress and social anxiety",
+                    lesionLocation: "Left cheek, extending from temple to jaw line",
+                    lesionSize: "7cm linear scar",
+                    growthRate: "stable",
+                    symptoms: [],
+                    additionalNotes: "Patient reports severe impact on confidence, avoiding social situations, relationship difficulties. Currently seeing counselor for body dysmorphia concerns."
+                }
+            },
+            'urgent-scc': {
+                name: "Urgent SCC Case",
+                data: {
+                    patientName: "Robert Jones",
+                    nhsNumber: "789 012 3456",
+                    patientAge: "72",
+                    referringGP: "Dr. Ahmed Patel",
+                    lesionType: "Ulcerated lesion on lower lip, non-healing for 6 weeks, raised edges, central ulceration. Highly suspicious for squamous cell carcinoma.",
+                    lesionLocation: "Lower lip, right side",
+                    lesionSize: "12mm x 8mm",
+                    growthRate: "rapid",
+                    symptoms: ["Ulcerated", "Bleeding", "Fast-growing", "Non-healing"],
+                    additionalNotes: "Patient is a farmer with extensive sun exposure. Lesion appeared after minor trauma but has not healed. Very concerning appearance."
+                }
+            }
+        };
+
+        // ALL FUNCTIONS DEFINED HERE
+        
+        function switchTab(tabName) {
+            console.log('Switching to tab:', tabName);
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            appState.activeTab = tabName;
+
+            // Load tab-specific data
+            if (tabName === 'patients') {
+                loadPatientQueue();
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
+            
+            text.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function toggleTestData() {
+            const panel = document.getElementById('test-data-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function loadTestCase(caseId) {
+            const testCase = testDataSets[caseId];
+            if (!testCase) return;
+
+            const data = testCase.data;
+
+            // Populate form fields
+            document.getElementById('patient-name').value = data.patientName || '';
+            document.getElementById('nhs-number').value = data.nhsNumber || '';
+            document.getElementById('patient-age').value = data.patientAge || '';
+            document.getElementById('referring-gp').value = data.referringGP || '';
+            document.getElementById('lesion-type').value = data.lesionType || '';
+            document.getElementById('lesion-location').value = data.lesionLocation || '';
+            document.getElementById('lesion-size').value = data.lesionSize || '';
+            document.getElementById('growth-rate').value = data.growthRate || '';
+            document.getElementById('additional-notes').value = data.additionalNotes || '';
+
+            // Clear existing checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+
+            // Set symptoms
+            if (data.symptoms && Array.isArray(data.symptoms)) {
+                data.symptoms.forEach(symptom => {
+                    const checkbox = document.querySelector(`input[value="${symptom}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+
+            // Clear any existing results
+            document.getElementById('triage-result').classList.add('hidden');
+            document.getElementById('triage-placeholder').classList.remove('hidden');
+
+            // Hide test data panel
+            document.getElementById('test-data-panel').classList.add('hidden');
+
+            showNotification(`Loaded test case: ${testCase.name}`, 'success');
+        }
+
+        function clearForm() {
+            document.getElementById('referral-form').reset();
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            document.getElementById('triage-result').classList.add('hidden');
+            document.getElementById('triage-placeholder').classList.remove('hidden');
+            showNotification('Form cleared successfully', 'success');
+        }
+
+        function gatherFormData() {
+            const symptoms = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                symptoms.push(cb.value);
+            });
+
+            return {
+                patientName: document.getElementById('patient-name').value,
+                nhsNumber: document.getElementById('nhs-number').value,
+                patientAge: document.getElementById('patient-age').value,
+                referringGP: document.getElementById('referring-gp').value,
+                lesionType: document.getElementById('lesion-type').value,
+                lesionLocation: document.getElementById('lesion-location').value,
+                lesionSize: document.getElementById('lesion-size').value,
+                growthRate: document.getElementById('growth-rate').value,
+                symptoms: symptoms,
+                additionalNotes: document.getElementById('additional-notes').value
+            };
+        }
+
+        function performTriageCalculation(formData) {
+            let urgencyScore = 0;
+            let priority = 'routine';
+            let reasoning = [];
+
+            const lesionText = formData.lesionType.toLowerCase();
+            const notesText = formData.additionalNotes.toLowerCase();
+            
+            // Cancer keyword detection
+            const cancerKeywords = ['melanoma', 'scc', 'squamous cell', 'basal cell', 'bcc', 'sarcoma', 'malignant', 'cancer', 'carcinoma'];
+            const foundCancerKeywords = cancerKeywords.filter(keyword => 
+                lesionText.includes(keyword) || notesText.includes(keyword)
+            );
+            
+            if (foundCancerKeywords.length > 0) {
+                urgencyScore += 8;
+                reasoning.push(`🚨 Cancer-related keywords detected: ${foundCancerKeywords.join(', ')} (+8 points)`);
+            }
+
+            // Suspicious descriptors
+            const suspiciousTerms = ['suspicious', 'concerning', 'irregular', 'ulcerated', 'non-healing', 'bleeding'];
+            const foundSuspiciousTerms = suspiciousTerms.filter(term => 
+                lesionText.includes(term) || notesText.includes(term)
+            );
+            
+            if (foundSuspiciousTerms.length > 0) {
+                const points = foundSuspiciousTerms.length * 2;
+                urgencyScore += points;
+                reasoning.push(`⚠️ Suspicious clinical features: ${foundSuspiciousTerms.join(', ')} (+${points} points)`);
+            }
+
+            // Growth rate scoring
+            switch (formData.growthRate) {
+                case 'rapid':
+                    urgencyScore += 4;
+                    reasoning.push('📈 Rapid growth rate - high concern (+4 points)');
+                    break;
+                case 'moderate':
+                    urgencyScore += 2;
+                    reasoning.push('📊 Moderate growth rate (+2 points)');
+                    break;
+                case 'slow':
+                    urgencyScore += 1;
+                    reasoning.push('📉 Slow growth rate (+1 point)');
+                    break;
+                case 'stable':
+                    reasoning.push('📊 Stable lesion - no growth concerns');
+                    break;
+            }
+
+            // Symptoms scoring
+            const highRiskSymptoms = ['ulcerated', 'bleeding', 'fast-growing', 'non-healing'];
+            const mediumRiskSymptoms = ['irregular borders', 'color changes'];
+            
+            formData.symptoms.forEach(symptom => {
+                if (highRiskSymptoms.includes(symptom.toLowerCase())) {
+                    urgencyScore += 3;
+                    reasoning.push(`🔴 High-risk symptom: ${symptom} (+3 points)`);
+                } else if (mediumRiskSymptoms.includes(symptom.toLowerCase())) {
+                    urgencyScore += 2;
+                    reasoning.push(`🟡 Medium-risk symptom: ${symptom} (+2 points)`);
+                } else {
+                    urgencyScore += 1;
+                    reasoning.push(`🟢 Symptom noted: ${symptom} (+1 point)`);
+                }
+            });
+
+            // Age factor
+            if (formData.patientAge >= 65) {
+                urgencyScore += 2;
+                reasoning.push('👴 Patient age ≥65 years - increased skin cancer risk (+2 points)');
+            }
+
+            // Psychology indicators for MDT
+            const psychologyIndicators = ['anxiety', 'depression', 'psychological', 'confidence', 'social', 'counselor', 'therapy'];
+            const foundPsychIndicators = psychologyIndicators.filter(indicator => 
+                notesText.includes(indicator)
+            );
+
+            // Priority determination
+            if (urgencyScore >= 8 || foundCancerKeywords.length > 0) {
+                priority = 'urgent';
+            } else if (foundPsychIndicators.length > 0 || 
+                       lesionText.includes('aesthetic') || 
+                       lesionText.includes('cosmetic') || 
+                       notesText.includes('psychological') ||
+                       notesText.includes('confidence')) {
+                priority = 'mdt';
+                reasoning.push('🧠 Psychological/aesthetic factors detected - MDT review recommended');
+            } else if (urgencyScore >= 4) {
+                priority = 'routine';
+            } else if ((lesionText.includes('cosmetic') || lesionText.includes('skin tag')) && urgencyScore < 3) {
+                priority = 'non-priority';
+                reasoning.push('💄 Purely cosmetic concern - limited NHS funding');
+            } else {
+                priority = 'routine';
+            }
+
+            return {
+                priority,
+                urgencyScore: Math.min(urgencyScore, 15),
+                reasoning,
+                recommendation: getRecommendation(priority),
+                waitTime: getWaitTime(priority),
+                nextSteps: getNextSteps(priority)
+            };
+        }
+
+        function getRecommendation(priority) {
+            switch (priority) {
+                case 'urgent':
+                    return 'IMMEDIATE REFERRAL REQUIRED: This case meets criteria for the 2-week cancer pathway. Schedule urgent plastic surgery consultation and ensure patient is aware of timeframe.';
+                case 'routine':
+                    return 'Standard plastic surgery referral appropriate. Schedule within 18-week NHS target. Provide patient with monitoring advice.';
+                case 'mdt':
+                    return 'Multi-disciplinary team review recommended. This case requires combined assessment by plastic surgery and psychology teams.';
+                case 'non-priority':
+                    return 'Limited NHS funding likely for this cosmetic procedure. Discuss alternative options including private treatment.';
+                default:
+                    return 'Standard clinical review required. Monitor for any changes and reassess if symptoms evolve.';
+            }
+        }
+
+        function getWaitTime(priority) {
+            switch (priority) {
+                case 'urgent': return '1-2 weeks (2WW cancer pathway)';
+                case 'routine': return '12-18 weeks (standard pathway)';
+                case 'mdt': return '4-6 weeks (MDT assessment)';
+                case 'non-priority': return 'Not applicable (NHS funding unlikely)';
+                default: return '12-18 weeks';
+            }
+        }
+
+        function getNextSteps(priority) {
+            switch (priority) {
+                case 'urgent':
+                    return [
+                        'Submit to e-Referral Service immediately with URGENT flag',
+                        'Contact plastic surgery team directly by phone',
+                        'Inform patient about 2-week cancer pathway',
+                        'Ensure patient has emergency contact details'
+                    ];
+                case 'routine':
+                    return [
+                        'Submit standard e-Referral with clinical details',
+                        'Provide patient with NHS information leaflet',
+                        'Advise patient to monitor lesion for changes',
+                        'Schedule GP follow-up if symptoms worsen'
+                    ];
+                case 'mdt':
+                    return [
+                        'Submit to MDT coordinator for review',
+                        'Arrange pre-assessment psychology consultation',
+                        'Schedule combined clinic appointment',
+                        'Document psychological impact assessment'
+                    ];
+                case 'non-priority':
+                    return [
+                        'Discuss cosmetic surgery options with patient',
+                        'Provide information about private providers',
+                        'Document patient understanding of NHS position',
+                        'Offer reassurance about benign nature'
+                    ];
+                default:
+                    return ['Submit standard referral', 'Monitor symptoms', 'Follow up as needed'];
+            }
+        }
+
+        function calculateTriage() {
+            const formData = gatherFormData();
+            
+            // Basic validation
+            if (!formData.patientName || !formData.patientAge || !formData.lesionType || !formData.growthRate) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('calculate-text').style.display = 'none';
+            document.getElementById('calculate-loading').classList.remove('hidden');
+
+            // Simulate AI processing
+            setTimeout(() => {
+                const result = performTriageCalculation(formData);
+                displayTriageResult(result);
+
+                // Reset loading state
+                document.getElementById('calculate-text').style.display = 'inline';
+                document.getElementById('calculate-loading').classList.add('hidden');
+
+                showNotification('AI triage assessment completed successfully!', 'success');
+            }, 2500);
+        }
+
+        function displayTriageResult(result) {
+            const priorityIcons = {
+                'urgent': '🚨',
+                'routine': '🕒',
+                'mdt': '🧠',
+                'non-priority': '❌'
+            };
+
+            const resultHtml = `
+                <div class="triage-result ${result.priority}">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">${priorityIcons[result.priority]}</div>
+                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+                            ${result.priority.replace('-', ' ')} PRIORITY
+                        </h3>
+                        <div style="display: flex; justify-content: space-around; margin-top: 1rem;">
+                            <div><strong>Urgency Score:</strong> ${result.urgencyScore}/15</div>
+                            <div><strong>Wait Time:</strong> ${result.waitTime}</div>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <h4>ℹ️ Clinical Recommendation</h4>
+                        <p>${result.recommendation}</p>
+                    </div>
+
+                    <div class="result-section">
+                        <h4>🤖 AI Assessment Reasoning</h4>
+                        <ul>
+                            ${result.reasoning.map(reason => `<li>${reason}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="result-section">
+                        <h4>📋 Recommended Next Steps</h4>
+                        <ul>
+                            ${result.nextSteps.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 2rem;">
+                        <button class="btn btn-success btn-full" onclick="submitToEReferral('${result.priority}')">
+                            📤 Submit to e-Referral Service
+                        </button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <button class="btn btn-secondary" onclick="showClinicalNotes()">
+                                📋 View Clinical Notes
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.print()">
+                                🖨️ Print Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('triage-placeholder').classList.add('hidden');
+            document.getElementById('triage-result').innerHTML = resultHtml;
+            document.getElementById('triage-result').classList.remove('hidden');
+
+            // Store result for later use
+            window.currentTriageResult = result;
+        }
+
+        function submitToEReferral(priority) {
+            const formData = gatherFormData();
+            
+            console.log('e-Referral submission:', {
+                ...formData,
+                priority: priority,
+                submissionId: `REF${Date.now()}`,
+                submittedAt: new Date().toISOString()
+            });
+            
+            showNotification(`Successfully submitted to e-Referral Service with ${priority} priority`, 'success');
+            
+            // Add to referrals list
+            const newReferral = {
+                id: String(appState.referrals.length + 1).padStart(3, '0'),
+                patient: formData.patientName,
+                priority: priority,
+                condition: formData.lesionType.substring(0, 50) + '...',
+                date: new Date().toISOString().split('T')[0],
+                status: 'pending'
+            };
+            
+            appState.referrals.unshift(newReferral);
+            
+            // Update stats
+            if (priority === 'urgent') appState.stats.urgent++;
+            else if (priority === 'routine') appState.stats.routine++;
+            else if (priority === 'mdt') appState.stats.mdt++;
+            appState.stats.total++;
+            updateDashboardStats();
+            
+            // Clear form
+            setTimeout(() => {
+                clearForm();
+            }, 2000);
+        }
+
+        function showClinicalNotes() {
+            if (window.currentTriageResult) {
+                const formData = gatherFormData();
+                const notes = `
+NHS SMART TRIAGE - CLINICAL NOTES
+Generated: ${new Date().toLocaleString()}
+=====================================
+
+PATIENT DETAILS:
+• Name: ${formData.patientName}
+• Age: ${formData.patientAge} years
+• NHS Number: ${formData.nhsNumber}
+• Referring GP: ${formData.referringGP}
+
+CLINICAL PRESENTATION:
+• Description: ${formData.lesionType}
+• Location: ${formData.lesionLocation}
+• Size: ${formData.lesionSize}
+• Growth Pattern: ${formData.growthRate}
+
+SYMPTOMS: ${formData.symptoms.join(', ') || 'None'}
+
+ADDITIONAL NOTES:
+${formData.additionalNotes || 'None'}
+
+AI TRIAGE ASSESSMENT:
+Priority: ${window.currentTriageResult.priority.toUpperCase()}
+Urgency Score: ${window.currentTriageResult.urgencyScore}/15
+Wait Time: ${window.currentTriageResult.waitTime}
+
+RECOMMENDATION:
+${window.currentTriageResult.recommendation}
+                `.trim();
+                
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Clinical Notes - NHS Smart Triage</title>
+                            <style>
+                                body { font-family: monospace; padding: 20px; line-height: 1.4; }
+                                pre { white-space: pre-wrap; }
+                                h1 { color: #003087; }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>NHS Smart Triage - Clinical Notes</h1>
+                            <pre>${notes}</pre>
+                            <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; background: #003087; color: white; border: none; border-radius: 5px; cursor: pointer;">Print Notes</button>
+                        </body>
+                    </html>
+                `);
+                newWindow.document.close();
+            }
+        }
+
+        function loadPatientQueue() {
+            const tbody = document.getElementById('patient-queue');
+            tbody.innerHTML = '';
+
+            appState.referrals.forEach(referral => {
+                const priorityStyles = {
+                    'urgent': 'background: #f8d7da; color: #721c24;',
+                    'routine': 'background: #d4edda; color: #155724;',
+                    'mdt': 'background: #fff3cd; color: #856404;'
+                };
+
+                const priorityIcons = {
+                    'urgent': '🚨',
+                    'routine': '🕒',
+                    'mdt': '🧠'
+                };
+
+                const statusStyles = {
+                    'pending': 'background: #fff3cd; color: #856404;',
+                    'scheduled': 'background: #d4edda; color: #155724;',
+                    'mdt-review': 'background: #fff3cd; color: #856404;'
+                };
+
+                const row = `
+                    <tr>
+                        <td><strong>${referral.patient}</strong><br><small>ID: ${referral.id}</small></td>
+                        <td><span style="padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; ${priorityStyles[referral.priority]}">${priorityIcons[referral.priority]} ${referral.priority.toUpperCase()}</span></td>
+                        <td>${referral.condition}</td>
+                        <td>${referral.date}</td>
+                        <td><span style="padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; ${statusStyles[referral.status]}">${referral.status.replace('-', ' ').toUpperCase()}</span></td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewPatient('${referral.id}')" style="margin-right: 0.5rem;">View</button>
+                            <button class="btn btn-success" onclick="schedulePatient('${referral.id}')">Schedule</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function viewPatient(id) {
+            showNotification(`Opening patient record: ${id}`, 'success');
+        }
+
+        function schedulePatient(id) {
+            showNotification(`Scheduling appointment for patient: ${id}`, 'success');
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('urgent-count').textContent = appState.stats.urgent;
+            document.getElementById('routine-count').textContent = appState.stats.routine;
+            document.getElementById('mdt-count').textContent = appState.stats.mdt;
+            document.getElementById('total-count').textContent = appState.stats.total;
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form event handlers
+            document.getElementById('referral-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                calculateTriage();
+            });
+
+            // Photo upload handling
+            document.getElementById('photo-upload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    showNotification('Clinical photo uploaded successfully', 'success');
+                }
+            });
+
+            // Load initial data
+            loadPatientQueue();
+            showNotification('NHS Smart Triage System loaded successfully!', 'success');
+        });
+    </script>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🏥</div>
+                    <div class="logo-text">
+                        <h1>NHS Smart Triage</h1>
+                        <p>Plastic Surgery Referral System</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('dashboard')">
+                    📊 Dashboard
+                </button>
+                <button class="nav-tab" onclick="switchTab('referral')">
+                    📝 New Referral
+                </button>
+                <button class="nav-tab" onclick="switchTab('patients')">
+                    👥 Patient Queue
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-header">
+                    <h2>Dashboard Overview</h2>
+                    <p>Real-time view of plastic surgery referral system</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card urgent">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3 id="urgent-count">12</h3>
+                                <p>Urgent Cases</p>
+                            </div>
+                            <div class="stat-icon">🚨</div>
+                        </div>
+                    </div>
+                    <div class="stat-card routine">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3 id="routine-count">87</h3>
+                                <p>Routine Cases</p>
+                            </div>
+                            <div class="stat-icon">🕒</div>
+                        </div>
+                    </div>
+                    <div class="stat-card mdt">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3 id="mdt-count">23</h3>
+                                <p>MDT Review</p>
+                            </div>
+                            <div class="stat-icon">🧠</div>
+                        </div>
+                    </div>
+                    <div class="stat-card total">
+                        <div class="stat-content">
+                            <div class="stat-info">
+                                <h3 id="total-count">122</h3>
+                                <p>Total Active</p>
+                            </div>
+                            <div class="stat-icon">👥</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Referrals</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Priority</th>
+                                    <th>Condition</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>John Smith</strong><br><small>ID: 001</small></td>
+                                    <td><span style="background: #f8d7da; color: #721c24; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem;">🚨 URGENT</span></td>
+                                    <td>Melanoma suspect</td>
+                                    <td>2025-06-07</td>
+                                    <td><button class="btn btn-primary">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jane Doe</strong><br><small>ID: 002</small></td>
+                                    <td><span style="background: #d4edda; color: #155724; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem;">🕒 ROUTINE</span></td>
+                                    <td>Benign mole</td>
+                                    <td>2025-06-06</td>
+                                    <td><button class="btn btn-primary">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bob Wilson</strong><br><small>ID: 003</small></td>
+                                    <td><span style="background: #fff3cd; color: #856404; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem;">🧠 MDT</span></td>
+                                    <td>Aesthetic concern</td>
+                                    <td>2025-06-05</td>
+                                    <td><button class="btn btn-primary">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Referral Tab -->
+            <div id="referral" class="tab-content">
+                <div class="dashboard-header">
+                    <h2>New Referral Assessment</h2>
+                    <p>AI-powered triage for plastic surgery referrals</p>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="toggleTestData()">
+                            📋 Load Test Data
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearForm()">
+                            🔄 Clear Form
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Test Data Selector -->
+                <div id="test-data-panel" class="card hidden">
+                    <div class="card-header">
+                        <h3>Load Test Data for Demo</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            <button onclick="loadTestCase('urgent-melanoma')" class="test-case-btn" style="background: #ffebee; border-color: #f44336;">
+                                <strong>🚨 Urgent Melanoma Case</strong><br>
+                                <small>John Smith - Age 67<br>Suspicious lesion with rapid changes</small>
+                            </button>
+                            <button onclick="loadTestCase('routine-mole')" class="test-case-btn" style="background: #e8f5e8; border-color: #4caf50;">
+                                <strong>🕒 Routine Benign Mole</strong><br>
+                                <small>Emma Wilson - Age 34<br>Stable mole, cosmetic concern</small>
+                            </button>
+                            <button onclick="loadTestCase('mdt-aesthetic')" class="test-case-btn" style="background: #fff3e0; border-color: #ff9800;">
+                                <strong>🧠 MDT Aesthetic Case</strong><br>
+                                <small>Sarah Thompson - Age 28<br>Facial scar with psychological impact</small>
+                            </button>
+                            <button onclick="loadTestCase('urgent-scc')" class="test-case-btn" style="background: #ffebee; border-color: #f44336;">
+                                <strong>🚨 Urgent SCC Case</strong><br>
+                                <small>Robert Jones - Age 72<br>Non-healing ulcerated lesion</small>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Patient Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="referral-form">
+                                <div class="form-group">
+                                    <label class="form-label">Patient Name *</label>
+                                    <input type="text" class="form-input" id="patient-name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Age *</label>
+                                    <input type="number" class="form-input" id="patient-age" min="0" max="120" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">NHS Number</label>
+                                    <input type="text" class="form-input" id="nhs-number" placeholder="123 456 7890">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Referring GP</label>
+                                    <input type="text" class="form-input" id="referring-gp" placeholder="Dr. Name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Lesion Description *</label>
+                                    <textarea class="form-textarea" id="lesion-type" rows="4" placeholder="Detailed description of the lesion..." required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Location on Body</label>
+                                    <input type="text" class="form-input" id="lesion-location" placeholder="e.g., face, arm, back">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Size</label>
+                                    <input type="text" class="form-input" id="lesion-size" placeholder="e.g., 5mm, 2cm">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Growth Rate *</label>
+                                    <select class="form-select" id="growth-rate" required>
+                                        <option value="">Select growth rate</option>
+                                        <option value="rapid">Rapid (days to weeks)</option>
+                                        <option value="moderate">Moderate (months)</option>
+                                        <option value="slow">Slow (years)</option>
+                                        <option value="stable">Stable/No change</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Symptoms (check all that apply)</label>
+                                    <div class="checkbox-grid">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-ulcerated" value="Ulcerated">
+                                            <label for="symptom-ulcerated">Ulcerated</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-bleeding" value="Bleeding">
+                                            <label for="symptom-bleeding">Bleeding</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-fast-growing" value="Fast-growing">
+                                            <label for="symptom-fast-growing">Fast-growing</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-irregular" value="Irregular borders">
+                                            <label for="symptom-irregular">Irregular borders</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-color" value="Color changes">
+                                            <label for="symptom-color">Color changes</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="symptom-non-healing" value="Non-healing">
+                                            <label for="symptom-non-healing">Non-healing</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Additional Notes</label>
+                                    <textarea class="form-textarea" id="additional-notes" rows="3" placeholder="Any additional clinical notes..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Clinical Photo</label>
+                                    <div class="photo-upload" onclick="document.getElementById('photo-upload').click()">
+                                        <div>📷 Click to upload photo</div>
+                                        <small>Supports: JPG, PNG (Max 10MB)</small>
+                                        <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-full">
+                                    <span id="calculate-text">🤖 Calculate Triage Priority</span>
+                                    <span id="calculate-loading" class="loading hidden"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>AI Triage Assessment</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="triage-placeholder">
+                                <div style="text-align: center; padding: 3rem; color: #666;">
+                                    <div style="font-size: 4rem; margin-bottom: 1rem;">🤖</div>
+                                    <p>Complete the form and click "Calculate Triage Priority" to see AI assessment</p>
+                                </div>
+                            </div>
+                            <div id="triage-result" class="hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Queue Tab -->
+            <div id="patients" class="tab-content">
+                <div class="dashboard-header">
+                    <h2>Patient Queue Management</h2>
+                    <p>Manage and prioritize active referrals</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Active Referrals</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="patient-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Priority</th>
+                                    <th>Condition</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patient-queue">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notification-text"></span>
+    </div>
+</body>
+</html>

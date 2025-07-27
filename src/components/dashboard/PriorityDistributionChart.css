@@ -1,0 +1,157 @@
+/* PriorityDistributionChart CSS */
+.priority-distribution-chart {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+.chart-container {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.donut-chart {
+  overflow: visible;
+}
+
+.segment {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform-origin: 120px 120px;
+}
+
+.segment:hover,
+.segment.hovered {
+  transform: scale(1.05);
+  filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.center-label,
+.center-value {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 200px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.legend-item:hover,
+.legend-item.highlighted {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  transform: translateX(4px);
+}
+
+.legend-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.legend-item:hover .legend-indicator,
+.legend-item.highlighted .legend-indicator {
+  transform: scale(1.2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.legend-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.legend-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.legend-percentage {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.legend-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .priority-distribution-chart {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .chart-legend {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .legend-item {
+    padding: 0.5rem;
+  }
+}
+
+/* Animation for chart loading */
+@keyframes segmentAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.segment {
+  animation: segmentAppear 0.6s ease-out;
+}
+
+.segment.urgent {
+  animation-delay: 0.1s;
+}
+
+.segment.routine {
+  animation-delay: 0.2s;
+}
+
+.segment.nonPriority {
+  animation-delay: 0.3s;
+}

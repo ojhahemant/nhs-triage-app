@@ -1,0 +1,47 @@
+/* StarRating CSS */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star {
+  color: #d1d5db;
+  fill: currentColor;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.star.filled {
+  color: #fbbf24;
+}
+
+.star-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+.star.half-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fbbf24;
+  clip-path: inset(0 50% 0 0);
+  width: 16px;
+  height: 16px;
+}
+
+.rating-value {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}

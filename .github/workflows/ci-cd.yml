@@ -1,0 +1,112 @@
+name: Build and Deploy NHS Triage App
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test -- --passWithNoTests --watchAll=false
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          build-args: |
+            REACT_APP_OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            REACT_APP_OPENAI_MODEL=gpt-4o
+            REACT_APP_OPENAI_TEMPERATURE=0.7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "Attempting deployment on triagemedical.org..."
+
+            # Create directory if it doesn't exist (idempotent)
+            mkdir -p /opt/nhs-triage-app
+            cd /opt/nhs-triage-app || exit 1
+
+            echo "📦 Pulling latest Docker image"
+            # Stop and remove existing container (if running)
+            sudo docker stop nhs-app 2>/dev/null || true
+            sudo docker rm nhs-app 2>/dev/null || true
+            # Pull the latest image
+            sudo docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            # Run the new container
+            sudo docker run -d --name nhs-app -p 3000:80 --restart always ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+            echo "🌐 Installing nginx and certbot if needed"
+            # Update apt and install nginx/certbot if not present
+            sudo apt update -y
+            sudo apt install nginx certbot python3-certbot-nginx -y
+
+            echo "📝 Writing nginx config for triagemedical.org"
+            # Use a robust way to write multi-line content to a file
+            sudo bash -c 'cat > /etc/nginx/sites-available/triagemedical' << 'EOF'
+            server {
+                listen 80;
+                listen [::]:80;
+                server_name triagemedical.org www.triagemedical.org; # Added www for certbot
+
+                location / {
+                    proxy_pass http://localhost:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    proxy_cache_bypass $http_upgrade;
+                }
+            }
+            EOF
+
+            # Enable the new site and remove default
+            sudo ln -sf /etc/nginx/sites-available/triagemedical /etc/nginx/sites-enabled/
+            sudo rm -f /etc/nginx/sites-enabled/default
+            
+            # Test Nginx configuration and restart
+            sudo nginx -t && sudo systemctl restart nginx
+
+            echo "🔒 Generating SSL certificate for triagemedical.org"
+            # Obtain or renew SSL certificate using Certbot
+            sudo certbot --nginx -d triagemedical.org -d www.triagemedical.org --non-interactive --agree-tos --email ojhahemant@gmail.com || true
+
+            echo "🎉 Deployment complete at https://triagemedical.org"

@@ -1,0 +1,48 @@
+name: Server Diagnostics
+
+on:
+  workflow_dispatch: # This allows you to run it manually from the GitHub UI
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code (not strictly necessary for this, but good practice)
+        uses: actions/checkout@v4
+
+      - name: Run Diagnostics on Production Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.UPCLOUD_PRODUCTION_HOST }}
+          username: ${{ secrets.UPCLOUD_USERNAME }}
+          key: ${{ secrets.UPCLOUD_SSH_KEY }}
+          script: |
+            echo "--- Diagnosing Docker Container Status ---"
+            sudo docker ps -a
+
+            echo ""
+            echo "--- Diagnosing Docker Container Logs (last 50 lines) ---"
+            sudo docker logs nhs-app | tail -n 50 || echo "NHS App container logs not found or empty."
+
+            echo ""
+            echo "--- Diagnosing Nginx Status ---"
+            sudo systemctl status nginx
+
+            echo ""
+            echo "--- Diagnosing Nginx Error Logs (last 50 lines) ---"
+            sudo cat /var/log/nginx/error.log | tail -n 50 || echo "Nginx error logs not found or empty."
+
+            echo ""
+            echo "--- Verifying Port 3000 Listener ---"
+            sudo ss -tulpn | grep 3000 || echo "Nothing listening on port 3000."
+
+            echo ""
+            echo "--- Checking Server Firewall (UFW) Status ---"
+            sudo ufw status || echo "UFW not active or not installed."
+
+            echo ""
+            echo "--- Basic Connectivity Test to App Port (from localhost) ---"
+            # This attempts to connect to the docker app from inside the server
+            curl -vvv http://localhost:3000 || echo "Could not connect to http://localhost:3000 from server itself."
+
+            echo "--- Diagnostics Complete ---"

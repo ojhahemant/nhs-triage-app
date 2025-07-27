@@ -1,0 +1,75 @@
+# NHS Triage App - Production Docker Compose
+# For production deployments with additional security and monitoring
+
+version: '3.8'
+
+services:
+  nhs-triage-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"  # For HTTPS if using SSL certificates
+    environment:
+      # OpenAI Configuration (use secrets in production)
+      - REACT_APP_OPENAI_API_KEY_FILE=/run/secrets/openai_api_key
+      - REACT_APP_OPENAI_MODEL=${REACT_APP_OPENAI_MODEL:-gpt-4o}
+      - REACT_APP_OPENAI_TEMPERATURE=${REACT_APP_OPENAI_TEMPERATURE:-0.7}
+    secrets:
+      - openai_api_key
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    networks:
+      - nhs-network
+    volumes:
+      # Mount SSL certificates if using HTTPS
+      # - ./ssl:/etc/nginx/ssl:ro
+      # Mount custom nginx config if needed
+      # - ./nginx-prod.conf:/etc/nginx/nginx.conf:ro
+    labels:
+      - "com.nhs.app=triage"
+      - "com.nhs.environment=production"
+
+  # Optional: Add a monitoring service
+  # nginx-exporter:
+  #   image: nginx/nginx-prometheus-exporter:latest
+  #   ports:
+  #     - "9113:9113"
+  #   command:
+  #     - '-nginx.scrape-uri=http://nhs-triage-app:80/nginx_status'
+  #   networks:
+  #     - nhs-network
+
+networks:
+  nhs-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+
+secrets:
+  openai_api_key:
+    external: true
+
+# For production data persistence
+volumes:
+  nhs-logs:
+    driver: local

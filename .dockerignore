@@ -1,0 +1,78 @@
+# Docker ignore file for NHS Triage App
+# Exclude unnecessary files from Docker build context
+
+# Node modules and dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+build/
+dist/
+
+# Environment files (will be handled via Docker environment variables)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker files (we want the main Dockerfile but not others)
+docker-compose.override.yml
+.dockerignore
+
+# Documentation that's not needed in container
+docs/
+*.md
+!README.md
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Backup files
+*.backup
+*.bak
+*.bak2
+*.txt

@@ -1,0 +1,684 @@
+/* NHS Assessment Page Styles */
+
+/* Page Container */
+.nhs-assessment-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--nhs-spacing-6, 2rem);
+  background: var(--nhs-color-white, #ffffff);
+  min-height: 100vh;
+}
+
+/* Page Header */
+.nhs-assessment-header {
+  text-align: center;
+  margin-bottom: var(--nhs-spacing-6, 2rem);
+  padding: var(--nhs-spacing-5, 1.5rem);
+  background: var(--nhs-blue, #003087);
+  color: white;
+  border-radius: var(--nhs-border-radius, 8px);
+}
+
+.nhs-assessment-header h1 {
+  margin: 0 0 var(--nhs-spacing-2, 0.5rem) 0;
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+.nhs-assessment-header p {
+  margin: 0;
+  font-size: 1.125rem;
+  opacity: 0.9;
+}
+
+/* Form Styles */
+.nhs-form {
+  background: white;
+  border-radius: var(--nhs-border-radius, 8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.nhs-form-container {
+  padding: var(--nhs-spacing-6, 2rem);
+}
+
+.nhs-form-section {
+  margin-bottom: var(--nhs-spacing-5, 1.5rem);
+  padding-bottom: var(--nhs-spacing-5, 1.5rem);
+  border-bottom: 1px solid var(--nhs-color-border, #e9ecef);
+}
+
+.nhs-form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.nhs-form-section h2 {
+  margin: 0 0 var(--nhs-spacing-4, 1rem) 0;
+  color: var(--nhs-blue, #003087);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.nhs-form-group {
+  margin-bottom: var(--nhs-spacing-4, 1rem);
+}
+
+.nhs-label {
+  display: block;
+  margin-bottom: var(--nhs-spacing-2, 0.5rem);
+  font-weight: 600;
+  color: var(--nhs-color-text, #212529);
+  font-size: 1rem;
+}
+
+.nhs-textarea,
+.nhs-select,
+.nhs-input {
+  width: 100%;
+  padding: var(--nhs-spacing-3, 0.75rem);
+  border: 2px solid var(--nhs-color-border, #ced4da);
+  border-radius: var(--nhs-border-radius, 4px);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.nhs-textarea:focus,
+.nhs-select:focus,
+.nhs-input:focus {
+  outline: none;
+  border-color: var(--nhs-blue, #003087);
+  box-shadow: 0 0 0 0.2rem rgba(0, 48, 135, 0.25);
+}
+
+.nhs-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.nhs-form-actions {
+  margin-top: var(--nhs-spacing-5, 1.5rem);
+  padding-top: var(--nhs-spacing-5, 1.5rem);
+  border-top: 1px solid var(--nhs-color-border, #e9ecef);
+  text-align: center;
+}
+
+/* Care Card Styles */
+.nhs-care-card {
+  margin-top: var(--nhs-spacing-6, 2rem);
+  padding: var(--nhs-spacing-5, 1.5rem);
+  border-radius: var(--nhs-border-radius, 8px);
+  border-left: 4px solid;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nhs-care-card--immediate {
+  border-left-color: #d32f2f;
+  background: #fff5f5;
+}
+
+.nhs-care-card--urgent {
+  border-left-color: #f57c00;
+  background: #fff8e1;
+}
+
+.nhs-care-card--non-urgent {
+  border-left-color: #388e3c;
+  background: #f1f8e9;
+}
+
+.nhs-care-card__heading {
+  display: flex;
+  align-items: center;
+  margin: 0 0 var(--nhs-spacing-4, 1rem) 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--nhs-blue, #003087);
+}
+
+.nhs-care-card__heading .icon {
+  margin-right: var(--nhs-spacing-2, 0.5rem);
+  width: 24px;
+  height: 24px;
+}
+
+.nhs-care-card__content {
+  color: var(--nhs-color-text, #212529);
+}
+
+.result-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nhs-spacing-4, 1rem);
+}
+
+.result-item {
+  background: rgba(255, 255, 255, 0.8);
+  padding: var(--nhs-spacing-4, 1rem);
+  border-radius: var(--nhs-border-radius, 4px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.result-label {
+  font-weight: 600;
+  margin-bottom: var(--nhs-spacing-2, 0.5rem);
+  color: var(--nhs-blue, #003087);
+}
+
+.result-value {
+  display: flex;
+  align-items: center;
+  gap: var(--nhs-spacing-2, 0.5rem);
+  font-size: 1.125rem;
+}
+
+.result-value .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.result-value pre {
+  background: rgba(0, 0, 0, 0.05);
+  padding: var(--nhs-spacing-3, 0.75rem);
+  border-radius: var(--nhs-border-radius, 4px);
+  white-space: pre-wrap;
+  font-family: inherit;
+  margin: 0;
+}
+
+.confidence-indicator {
+  margin-top: var(--nhs-spacing-3, 0.75rem);
+}
+
+.confidence-gauge-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--nhs-spacing-2, 0.5rem);
+}
+
+.confidence-gauge {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.confidence-gauge.high-confidence {
+  background: #28a745;
+}
+
+.confidence-gauge.medium-confidence {
+  background: #ffc107;
+}
+
+.confidence-gauge.low-confidence {
+  background: #dc3545;
+}
+
+.result-disclaimer {
+  margin-top: var(--nhs-spacing-4, 1rem);
+  padding: var(--nhs-spacing-3, 0.75rem);
+  background: rgba(0, 48, 135, 0.05);
+  border-left: 3px solid var(--nhs-blue, #003087);
+  border-radius: var(--nhs-border-radius, 4px);
+}
+
+.result-actions {
+  display: flex;
+  gap: var(--nhs-spacing-3, 0.75rem);
+  margin-top: var(--nhs-spacing-4, 1rem);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nhs-spacing-2, 0.5rem);
+  padding: var(--nhs-spacing-3, 0.75rem) var(--nhs-spacing-4, 1rem);
+  border-radius: var(--nhs-border-radius, 4px);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn.primary {
+  background: var(--nhs-blue, #003087);
+  color: white;
+}
+
+.btn.primary:hover {
+  background: var(--nhs-blue-dark, #002060);
+}
+
+.btn.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn.secondary:hover {
+  background: #5a6268;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nhs-assessment-page {
+    padding: var(--nhs-spacing-4, 1rem);
+  }
+  
+  .nhs-assessment-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .result-actions {
+    flex-direction: column;
+    gap: var(--nhs-spacing-2);
+  }
+  
+  .btn {
+    justify-content: center;
+  }
+}
+
+.nhs-select-group .nhs-label {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--nhs-color-blue);
+}
+
+.nhs-select-group .nhs-icon--small {
+  width: 16px;
+  height: 16px;
+  margin-right: var(--nhs-spacing-2);
+}
+
+/* Loading States */
+.nhs-loading-indicator {
+  display: flex;
+  align-items: center;
+  padding: var(--nhs-spacing-3);
+  background: var(--nhs-color-blue-10);
+  border-radius: var(--nhs-border-radius);
+  color: var(--nhs-color-blue);
+  font-weight: 500;
+  margin-top: var(--nhs-spacing-3);
+}
+
+.nhs-loading-indicator .nhs-icon {
+  margin-right: var(--nhs-spacing-2);
+}
+
+.nhs-icon--spin {
+  animation: nhs-spin 1s linear infinite;
+}
+
+/* Extracted Content Display */
+.nhs-extracted-content {
+  margin-top: var(--nhs-spacing-4);
+  border: 1px solid var(--nhs-color-border);
+  border-radius: var(--nhs-border-radius);
+  overflow: hidden;
+}
+
+.nhs-subsection-title {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--nhs-spacing-3);
+  background: var(--nhs-color-blue-10);
+  color: var(--nhs-color-blue);
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--nhs-color-border);
+}
+
+.nhs-subsection-title .nhs-icon {
+  margin-right: var(--nhs-spacing-2);
+}
+
+.nhs-text-preview {
+  padding: var(--nhs-spacing-4);
+  background: var(--nhs-color-grey-10);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.nhs-text-preview pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: var(--nhs-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--nhs-color-text);
+}
+
+/* Image Preview */
+.nhs-image-preview {
+  margin-top: var(--nhs-spacing-4);
+  border: 1px solid var(--nhs-color-border);
+  border-radius: var(--nhs-border-radius);
+  overflow: hidden;
+}
+
+.nhs-preview-content {
+  padding: var(--nhs-spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nhs-spacing-3);
+}
+
+.nhs-image-thumbnail {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-border);
+  object-fit: cover;
+}
+
+.nhs-file-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--nhs-spacing-4);
+  background: var(--nhs-color-grey-10);
+  border-radius: var(--nhs-border-radius);
+  max-width: 200px;
+}
+
+.nhs-file-icon {
+  color: var(--nhs-color-blue);
+  margin-bottom: var(--nhs-spacing-2);
+}
+
+.nhs-file-extension {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--nhs-color-text-secondary);
+  background: var(--nhs-color-white);
+  padding: var(--nhs-spacing-1) var(--nhs-spacing-2);
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-border);
+}
+
+.nhs-ai-description {
+  color: var(--nhs-color-text);
+  line-height: 1.5;
+}
+
+.nhs-ai-description strong {
+  color: var(--nhs-color-blue);
+}
+
+/* Form Actions */
+.nhs-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nhs-spacing-4);
+  padding: var(--nhs-spacing-5);
+  background: var(--nhs-color-grey-10);
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-border);
+}
+
+/* Results Section */
+.nhs-results-container {
+  margin-top: var(--nhs-spacing-6);
+}
+
+.nhs-care-card {
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-border);
+  overflow: hidden;
+  background: var(--nhs-color-white);
+  box-shadow: var(--nhs-box-shadow);
+}
+
+.nhs-care-card--urgent {
+  border-left: 5px solid var(--nhs-color-urgent);
+}
+
+.nhs-care-card--routine {
+  border-left: 5px solid var(--nhs-color-routine);
+}
+
+.nhs-care-card--non-urgent {
+  border-left: 5px solid var(--nhs-color-non-priority);
+}
+
+.nhs-care-card--immediate {
+  border-left: 5px solid var(--nhs-color-red);
+  background: var(--nhs-color-red-10);
+}
+
+.nhs-care-card__heading {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--nhs-spacing-4);
+  background: var(--nhs-color-blue-10);
+  color: var(--nhs-color-blue);
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--nhs-color-border);
+}
+
+.nhs-care-card__heading .nhs-icon {
+  margin-right: var(--nhs-spacing-2);
+}
+
+.nhs-care-card__content {
+  padding: var(--nhs-spacing-5);
+}
+
+/* Result Grid */
+.nhs-result-grid {
+  display: grid;
+  gap: var(--nhs-spacing-4);
+  margin-bottom: var(--nhs-spacing-5);
+}
+
+.nhs-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nhs-spacing-2);
+}
+
+.nhs-result-label {
+  font-weight: 600;
+  color: var(--nhs-color-blue);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nhs-result-value {
+  display: flex;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 500;
+  padding: var(--nhs-spacing-3);
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-border);
+  background: var(--nhs-color-white);
+}
+
+.nhs-result-value .nhs-icon {
+  margin-right: var(--nhs-spacing-2);
+}
+
+/* Category Specific Styling */
+.nhs-result-value.category-urgent {
+  background: var(--nhs-color-urgent-10);
+  border-color: var(--nhs-color-urgent);
+  color: var(--nhs-color-urgent);
+}
+
+.nhs-result-value.category-routine {
+  background: var(--nhs-color-routine-10);
+  border-color: var(--nhs-color-routine);
+  color: var(--nhs-color-routine);
+}
+
+.nhs-result-value.category-non-priority {
+  background: var(--nhs-color-non-priority-10);
+  border-color: var(--nhs-color-non-priority);
+  color: var(--nhs-color-non-priority);
+}
+
+.nhs-result-value.category-mdt-required {
+  background: var(--nhs-color-mdt-10);
+  border-color: var(--nhs-color-mdt);
+  color: var(--nhs-color-mdt);
+}
+
+/* Confidence Indicator */
+.nhs-confidence-indicator {
+  margin-top: var(--nhs-spacing-2);
+}
+
+.nhs-confidence-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--nhs-color-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--nhs-spacing-1);
+}
+
+.nhs-confidence-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.nhs-confidence-fill.high-confidence {
+  background: var(--nhs-color-green);
+}
+
+.nhs-confidence-fill.medium-confidence {
+  background: var(--nhs-color-routine);
+}
+
+.nhs-confidence-fill.low-confidence {
+  background: var(--nhs-color-urgent);
+}
+
+/* Rationale */
+.nhs-result-rationale {
+  background: var(--nhs-color-grey-10);
+  border: 1px solid var(--nhs-color-border);
+  border-radius: var(--nhs-border-radius);
+  padding: var(--nhs-spacing-4);
+  margin-top: var(--nhs-spacing-3);
+}
+
+.nhs-result-rationale pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--nhs-color-text);
+}
+
+/* Disclaimer */
+.nhs-result-disclaimer {
+  padding: var(--nhs-spacing-4);
+  background: var(--nhs-color-blue-10);
+  border-radius: var(--nhs-border-radius);
+  border: 1px solid var(--nhs-color-blue-20);
+  margin-top: var(--nhs-spacing-4);
+}
+
+.nhs-result-disclaimer small {
+  color: var(--nhs-color-blue);
+  line-height: 1.4;
+}
+
+/* Action Buttons */
+.nhs-action-buttons {
+  display: flex;
+  gap: var(--nhs-spacing-3);
+  margin-top: var(--nhs-spacing-4);
+  flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .nhs-assessment-header {
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  
+  .nhs-header-actions {
+    flex-wrap: nowrap;
+  }
+  
+  .nhs-document-options {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  
+  .nhs-form-actions {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  
+  .nhs-result-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .nhs-action-buttons {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 992px) {
+  .nhs-assessment-page {
+    padding: var(--nhs-spacing-8);
+  }
+  
+  .nhs-result-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .nhs-assessment-header,
+  .nhs-form-actions,
+  .nhs-action-buttons {
+    display: none;
+  }
+  
+  .nhs-assessment-page {
+    padding: 0;
+  }
+  
+  .nhs-care-card {
+    box-shadow: none;
+    border: 2px solid var(--nhs-color-blue);
+  }
+}
