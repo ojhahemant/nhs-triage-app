@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import './PostTriagingActionsPage.css';
 import LetterGenerator from '../components/LetterGenerator';
+import OpList from '../components/OpList';
 
 interface PatientCommunication {
   emailSent: boolean;
@@ -77,6 +78,7 @@ const PostTriagingActionsPage: React.FC = () => {
     name: string;
     category: 'urgent' | 'routine' | 'non-priority';
   } | null>(null);
+  const [opListExpanded, setOpListExpanded] = useState(false);
 
   useEffect(() => {
     // Simulate loading post-triaging actions data
@@ -355,6 +357,12 @@ const PostTriagingActionsPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Op List Section */}
+      <OpList 
+        isExpanded={opListExpanded} 
+        onToggle={() => setOpListExpanded(!opListExpanded)} 
+      />
 
       <div className="actions-grid">
         {filteredActions.map((action) => (

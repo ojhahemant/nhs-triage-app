@@ -152,8 +152,36 @@ This comprehensive guide will help you navigate and use all features of the NHS 
 ### Scheduling Management
 - **Clinic Appointments**: Track scheduling status
 - **Theater Listings**: Surgical case management
+- **Op List Management**: Daily surgical schedules and theatre planning
 - **Resource Allocation**: Practitioner and location assignment
 - **Status Tracking**: Pending, scheduled, completed states
+
+#### Op List Features
+- **Daily Theatre Schedule**: View patients scheduled for surgery by date
+- **Surgeon Assignment**: See which consultant is performing each procedure
+- **Procedure Details**: Clinical information and procedure type
+- **Time Management**: Appointment slots and theatre scheduling
+- **Patient Information**: Demographics and NHS numbers for verification
+- **Export Options**: Download theatre lists for clinical teams
+
+#### How to Use Op List
+1. **Access**: Navigate to Post-Triaging Actions page
+2. **Expand Section**: Click on "Op List Management" to expand the view
+3. **Select Date**: Choose the date for which you want to view the surgical schedule
+4. **Filter by Consultant**: Narrow down the list by specific consultant
+5. **Search**: Use the search function to find specific patients or procedures
+6. **View Details**: See comprehensive patient and appointment information
+7. **Export**: Download the list as CSV for theatre management and printing
+
+#### Op List Information Displayed
+- **Patient Details**: Name, age, gender, CHI number
+- **Consultant**: Assigned surgeon for the procedure
+- **Procedure**: Description of the surgical intervention
+- **Location**: Theatre or clinic location (e.g., "LA" for Local Anaesthetic)
+- **Appointment Type**: Nature of the appointment (See and Treat, Surgery, etc.)
+- **Time Slot**: Scheduled time for the procedure
+- **Status**: Current status (Scheduled, Confirmed, In Progress, Completed)
+- **Urgency Level**: Color-coded priority (Red=Urgent, Yellow=Routine, Green=Non-Priority)
 
 ### Workflow Automation
 - **Automated Steps**: System-driven processes
