@@ -69,8 +69,12 @@ const Login: React.FC = () => {
       <div className="login-background">
         <div className="login-form-container">
           <div className="login-header">
-            <div className="nhs-logo">
-              <div className="nhs-logo-block">NHS</div>
+            <div className="logo-container">
+              <img 
+                src="/MED_INNOVATIONS.png" 
+                alt="Med Innovations Logo" 
+                className="login-logo"
+              />
             </div>
             <h1>Plastic Surgery Triage System</h1>
             <p>Secure Clinical Access Portal</p>

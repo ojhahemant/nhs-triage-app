@@ -48,7 +48,7 @@ src/
 **File:** `src/components/Login.tsx`
 - **Purpose:** Clean, professional login interface
 - **Features:**
-  - NHS-styled login form
+  - Custom MED_INNOVATIONS logo (replaces NHS branding)
   - Username and password fields (no icons)
   - Form validation and error handling
   - Password visibility toggle
@@ -57,13 +57,14 @@ src/
 
 ### 3. Login Styling
 **File:** `src/components/Login.css`
-- **Purpose:** Professional NHS design for login page
+- **Purpose:** Professional design for login page with custom branding
 - **Features:**
   - Blue gradient background
   - Clean white form container
+  - Custom MED_INNOVATIONS logo styling
   - Responsive design for all devices
   - Clean input fields without overlapping icons
-  - NHS branding elements
+  - Professional medical branding elements
 
 ### 4. Protected Route Wrapper
 **File:** `src/components/ProtectedRoute.tsx`
