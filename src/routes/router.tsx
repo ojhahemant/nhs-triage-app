@@ -1,6 +1,8 @@
 import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import ProtectedRoute from '../components/ProtectedRoute';
+import Login from '../components/Login';
 
 // Import existing assessment component
 import NewReferralAssessment from '../pages/Assessment/NewReferralAssessment';
@@ -16,8 +18,16 @@ import GuidelinesPage from '../pages/GuidelinesPage';
 
 export const router = createBrowserRouter([
   {
+    path: '/login',
+    element: <Login />
+  },
+  {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

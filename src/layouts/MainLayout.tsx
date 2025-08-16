@@ -11,8 +11,10 @@ import {
   BookOpen, 
   Home,
   Users,
-  Settings
+  Settings,
+  LogOut
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import HelpSystem from '../components/HelpSystem';
 import '../styles/layouts/layout.css';
 
@@ -27,6 +29,11 @@ interface NavigationItem {
 const MainLayout: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const navigationItems: NavigationItem[] = [
     {
@@ -181,13 +188,48 @@ const MainLayout: React.FC = () => {
         <header className="main-header">
           <div className="header-left">
             <h1 className="page-title">
-              {navigationItems.find(item => isActiveRoute(item.path))?.label || 'Healthcare Plastic Surgery Triage System'}
+              {navigationItems.find(item => isActiveRoute(item.path))?.label || 'Plastic Surgery Triage System'}
             </h1>
           </div>
           <div className="header-right">
-            <button className="header-button" title="Settings">
-              <Settings size={20} />
-            </button>
+            <div className="user-info">
+              <span className="user-welcome">Welcome, {user?.fullName}</span>
+              <span className="user-role">{user?.role}</span>
+            </div>
+            
+            <div className="header-actions">
+              <button 
+                className="logout-button-direct"
+                onClick={handleLogout}
+                title="Sign Out"
+                style={{
+                  background: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 2px 4px rgba(220, 38, 38, 0.3)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </div>
           </div>
         </header>
 

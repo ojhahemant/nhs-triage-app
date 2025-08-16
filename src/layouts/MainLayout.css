@@ -211,7 +211,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 100000; /* Higher than help system */
 }
 
 .page-title {
@@ -224,7 +224,142 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.user-welcome {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  line-height: 1.2;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Increase gap between buttons */
+  z-index: 100001; /* Higher than header */
+  position: relative; /* Ensure z-index takes effect */
+  margin-left: 16px; /* Add margin to separate from user info */
+}
+
+.user-menu-container {
+  position: relative;
+  z-index: 100002; /* Higher than header-actions */
+}
+
+.user-button {
+  background: linear-gradient(135deg, #005eb8 0%, #003d82 100%);
+  border: none;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px; /* Ensure minimum width */
+  min-height: 40px; /* Ensure minimum height */
+  box-shadow: 0 2px 4px rgba(0, 94, 184, 0.2); /* Add shadow for visibility */
+}
+
+.user-button:hover {
+  background: linear-gradient(135deg, #004494 0%, #002d5e 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 94, 184, 0.3);
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  min-width: 200px;
+  z-index: 100003; /* Highest z-index to ensure it appears above everything */
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-dropdown-header {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.user-role-badge {
+  font-size: 12px;
+  color: #005eb8;
+  background: rgba(0, 94, 184, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  font-weight: 500;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 8px 0;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.logout-button:hover {
+  background: #fef2f2;
+  color: #b91c1c;
 }
 
 .header-button {
@@ -266,6 +401,30 @@
   
   .main-content.expanded {
     margin-left: 0;
+  }
+  
+  /* Header responsive adjustments */
+  .header-right {
+    gap: 8px; /* Reduce gap on mobile */
+  }
+  
+  .user-info {
+    display: none; /* Hide user info text on very small screens */
+  }
+  
+  .header-actions {
+    gap: 4px; /* Reduce gap between buttons */
+  }
+}
+
+@media (max-width: 480px) {
+  .user-welcome,
+  .user-role {
+    display: none; /* Hide user text on very small screens */
+  }
+  
+  .header-right {
+    gap: 4px;
   }
 }
 
