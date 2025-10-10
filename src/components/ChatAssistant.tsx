@@ -57,7 +57,7 @@ const ChatAssistant: React.FC<ChatAssistantProps> = ({ triageData, isOpen, onClo
     if (messages.length === 0) {setMessages([
         {
           role: 'assistant',
-          content: `Hello, I'm your Healthcare Dermatology Triage assistant. I can help you understand the triage results and answer questions about the assessment${triageData.assessment.categorization ? ', including the AI-suggested case categorization' : ''}. How can I help you today?`
+          content: `Hello, I'm your Healthcare Triage assistant. I can help you understand the triage results and answer questions about the assessment${triageData.assessment.categorization ? ', including the AI-suggested case categorization' : ''}. How can I help you today?`
         }
       ]);    }
   }, [messages.length, triageData.assessment.categorization]);
