@@ -432,8 +432,7 @@ const NewReferralAssessment: React.FC = () => {
                     </span>
                   </div>
                   <div className="preview-content">
-                    {formData.extractedText.slice(0, 300)}
-                    {formData.extractedText.length > 300 && '...'}
+                    {formData.extractedText}
                   </div>
                 </div>
               )}
